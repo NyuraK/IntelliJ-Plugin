@@ -46,65 +46,62 @@ public class ConsoleAction extends DumbAwareAction {
         MyConfigurable instance = new MyConfigurable(project, consoleView);
         instance.prepareForm();
         ShowSettingsUtil.getInstance().editConfigurable(project, "GrepConsoleSettings", instance, true);
-
-
     }
 
-    private ConsoleView createConsole(@NotNull Project project, ConsoleViewImpl consoleView, MyProcessHandler processHandler) {
-        ConsoleView console = new ConsoleViewImpl(project, false);
-        console.attachToProcess(processHandler);
-        return console;
-    }
+//    private ConsoleView createConsole(@NotNull Project project, ConsoleViewImpl consoleView, MyProcessHandler processHandler) {
+//        ConsoleView console = new ConsoleViewImpl(project, false);
+//        console.attachToProcess(processHandler);
+//        return console;
+//    }
 
-    private static MyJPanel createConsolePanel(RunnerLayoutUi runnerLayoutUi, ConsoleView view, ActionGroup actions,
-                                               ExpressionWindow comp) {
-        MyJPanel panel = new MyJPanel(runnerLayoutUi);
-        panel.setLayout(new BorderLayout());
-        panel.add(comp.getRootComponent(), BorderLayout.NORTH);
-        panel.add(view.getComponent(), BorderLayout.CENTER);
-        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, actions,
-                false);
-        panel.add(actionToolbar.getComponent(), BorderLayout.WEST);
-        return panel;
-    }
-
-    static class MyJPanel extends JPanel implements Disposable {
-        private RunnerLayoutUi runnerLayoutUi;
-
-        public MyJPanel(RunnerLayoutUi runnerLayoutUi) {
-            this.runnerLayoutUi = runnerLayoutUi;
-        }
-
-        @Override
-        public void dispose() {
-
-            removeAll();
-        }
-    }
-
-    private class MyProcessHandler extends ProcessHandler {
-        @Override
-        protected void destroyProcessImpl() {
-
-        }
-
-        @Override
-        protected void detachProcessImpl() {
-
-        }
-
-        @Override
-        public boolean detachIsDefault() {
-            return false;
-        }
-
-        @Nullable
-        @Override
-        public OutputStream getProcessInput() {
-            return null;
-        }
-    }
-
+//    private static MyJPanel createConsolePanel(RunnerLayoutUi runnerLayoutUi, ConsoleView view, ActionGroup actions,
+//                                               ExpressionWindow comp) {
+//        MyJPanel panel = new MyJPanel(runnerLayoutUi);
+//        panel.setLayout(new BorderLayout());
+//        panel.add(comp.getRootComponent(), BorderLayout.NORTH);
+//        panel.add(view.getComponent(), BorderLayout.CENTER);
+//        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, actions,
+//                false);
+//        panel.add(actionToolbar.getComponent(), BorderLayout.WEST);
+//        return panel;
+//    }
+//
+//    static class MyJPanel extends JPanel implements Disposable {
+//        private RunnerLayoutUi runnerLayoutUi;
+//
+//        public MyJPanel(RunnerLayoutUi runnerLayoutUi) {
+//            this.runnerLayoutUi = runnerLayoutUi;
+//        }
+//
+//        @Override
+//        public void dispose() {
+//
+//            removeAll();
+//        }
+//    }
+//
+//    private class MyProcessHandler extends ProcessHandler {
+//        @Override
+//        protected void destroyProcessImpl() {
+//
+//        }
+//
+//        @Override
+//        protected void detachProcessImpl() {
+//
+//        }
+//
+//        @Override
+//        public boolean detachIsDefault() {
+//            return false;
+//        }
+//
+//        @Nullable
+//        @Override
+//        public OutputStream getProcessInput() {
+//            return null;
+//        }
+//    }
 
     private String getExpression(AnActionEvent e) {
         String s = Kit.getSelectedString(e);

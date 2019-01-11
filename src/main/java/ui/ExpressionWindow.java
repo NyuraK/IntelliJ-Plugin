@@ -1,32 +1,65 @@
 package ui;
 
+import com.intellij.ui.ColorChooser;
+import com.intellij.ui.components.JBScrollPane;
+import plugin.Configuration;
 import plugin.MyConfigurable;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ExpressionWindow {
+@Deprecated
+public class ExpressionWindow extends JFrame {
     private JPanel root;
     private JButton addButton;
+    private JTextField textField1;
+    private JPanel panel;
+    //    private UIExprItem UIExprItem1;
+
+    private Configuration configuration;
 
     public ExpressionWindow(MyConfigurable configurable) {
-//        addButton.addActionListener(new AddNewItemAction(grepTable, false));
         addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JLabel component = new JLabel(textField1.getText());
+                panel.add(component);
+//                scrollPanel.add(new UIExprItem(textField1.getText()));
+//                scrollPanel.revalidate();
+
+                textField1.setText("");
+                pack();
+                repaint();
+            }
+        });
+
+        textField1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
         });
-        root.getAccessibleContext();
-    }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+
+        root.getAccessibleContext();
     }
 
     public JPanel getRootComponent() {
         return root;
+    }
+
+    private void createUIComponents() {
+//        scrollPanel = new JBScrollPane();
+//        panel = new JPanel();
+//        panel.add(scrollPanel);
+//        root.add(panel);
+//        pack();
+//        UIExprItem1 = new UIExprItem("default");
+//        UIExprItem1.setPreferredSize(new Dimension(70, 30));
     }
 
 

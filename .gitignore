@@ -1,0 +1,13 @@
+.gradle/
+.idea/
+build.gradle
+build/
+com.on.my-plugin.iml
+com.on.my-plugin.main.iml
+com.on.my-plugin.test.iml
+gradle/
+gradlew
+gradlew.bat
+my-plugin.ipr
+my-plugin.iws
+settings.gradle
