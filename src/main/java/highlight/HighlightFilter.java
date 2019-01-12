@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.Configuration;
 import plugin.ExpressionProcessor;
+import plugin.MyConfigurable;
 import stuff.ExpressionItem;
 
 import java.util.ArrayList;
@@ -18,21 +19,28 @@ import java.util.List;
 public class HighlightFilter implements Filter, DumbAware {
 
     private Project project;
-    private Configuration configuration;
+    private MyConfigurable configuration;
     private List<ExpressionProcessor> expressionProcessors;
-    protected ConsoleViewContentType lastTextAttributes = null;
+    private ConsoleViewContentType lastTextAttributes = null;
 
-    public HighlightFilter(@NotNull Project project, Configuration configuration) {
+    public HighlightFilter(@NotNull Project project, MyConfigurable configuration) {
         this.project = project;
         this.configuration = configuration;
         expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : configuration.getExpressionItems())
+        for (ExpressionItem item : configuration.getExpressionItems()) {
             expressionProcessors.add(new ExpressionProcessor(item));
+            System.out.println(item.toString());
+        }
+    }
+
+    public ExpressionItem getExpressionItem() {
+        return expressionProcessors.get(0).getExpressionItem();
     }
 
     @Nullable
     @Override
     public Result applyFilter(String line, int entireLength) {
+        System.out.println("We entered apply" + line);
         int offset = entireLength;
         if (line != null)
             offset = entireLength-line.length();
@@ -46,6 +54,7 @@ public class HighlightFilter implements Filter, DumbAware {
 
     private final FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
+            System.out.println("We entered FilterState filter(@Nullable String text, int offset");
             String substring = configuration.limitInputLength_andCutNewLine(text);
             CharSequence charSequence = configuration.limitProcessingTime(substring);
 

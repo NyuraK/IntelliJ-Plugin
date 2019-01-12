@@ -35,17 +35,8 @@ public class ConsoleAction extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-//        ConsoleViewImpl consoleView = (ConsoleViewImpl) e.getData(LangDataKeys.CONSOLE_VIEW);
-//        String expression = getExpression(e);
-//
-//        ConsoleViewImpl newConsole = (ConsoleViewImpl) createConsole(project, consoleView, new MyProcessHandler());
-//        ExecutionResult
-//        final ExpressionItem quickFilterPanel = new ExpressionItem(consoleView, newConsole, expression, runnerLayoutUi);
-//        DefaultActionGroup actions = new DefaultActionGroup();
-//        final MyJPanel consolePanel = createConsolePanel(runnerLayoutUi, newConsole, actions, );
-        MyConfigurable instance = new MyConfigurable(project, consoleView);
-        instance.prepareForm();
-        ShowSettingsUtil.getInstance().editConfigurable(project, "GrepConsoleSettings", instance, true);
+        MyConfigurable.getInstance().prepareForm();
+        ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfigurable.getInstance(), true);
     }
 
 //    private ConsoleView createConsole(@NotNull Project project, ConsoleViewImpl consoleView, MyProcessHandler processHandler) {

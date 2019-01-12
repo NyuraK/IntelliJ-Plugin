@@ -5,6 +5,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.NotNull;
 import plugin.Configuration;
+import plugin.MyConfigurable;
 import stuff.ExpressionItem;
 
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ public class FilterState {
     private boolean exclude;
     private boolean matchesSomething;
     private String text;
-    private final Configuration configuration;
+    private final MyConfigurable configuration;
     private CharSequence charSequence;
     private boolean textChanged;
 
-    public FilterState(int offset, String text, Configuration configuration, CharSequence charSequence) {
+    public FilterState(int offset, String text, MyConfigurable configuration, CharSequence charSequence) {
         this.offset = offset;
         this.text = text;
         this.configuration = configuration;
@@ -32,7 +33,6 @@ public class FilterState {
     public CharSequence getCharSequence() {
         return charSequence;
     }
-
 
     public void setConsoleViewContentType(ConsoleViewContentType consoleViewContentType) {
         this.consoleViewContentType = consoleViewContentType;
@@ -63,6 +63,7 @@ public class FilterState {
         }
         return resultItemList.add(resultItem);
     }
+
     public void executeAction(ExpressionItem expressionItem) {
 
         if (expressionItem.shallHide()) {

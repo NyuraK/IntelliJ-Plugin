@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+@Deprecated
 public class MySettingsEditor extends SettingsEditor<RunConfigurationBase> {
     private final RunConfigurationBase configuration;
     private MyConfigurable configurable;
@@ -28,7 +29,7 @@ public class MySettingsEditor extends SettingsEditor<RunConfigurationBase> {
     @NotNull
     @Override
     protected JComponent createEditor() {
-        configurable = new MyConfigurable(configuration);
+//        configurable = new MyConfigurable(configuration);
         return configurable.createComponent();
     }
 }

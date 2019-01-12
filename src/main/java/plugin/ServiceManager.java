@@ -2,6 +2,7 @@ package plugin;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.openapi.project.Project;
 import highlight.HighlightFilter;
 
@@ -9,6 +10,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class ServiceManager {
     private static final ServiceManager SERVICE_MANAGER = new ServiceManager();
 
@@ -21,7 +23,7 @@ public class ServiceManager {
 
     public Filter createHighlightFilter(Project project, ConsoleView consoleView) {
 
-        HighlightFilter highlightFilter = new HighlightFilter(project, MyAppComponent.getInstance().getState());
+        HighlightFilter highlightFilter = new HighlightFilter(project, MyConfigurable.getInstance().getState());
         highlightFilters.add(new WeakReference<>(highlightFilter));
 //        if (consoleView != null) {
 //            ConsoleViewData consoleViewData = getOrCreateData(consoleView);
@@ -31,6 +33,5 @@ public class ServiceManager {
     }
 
     private class ConsoleViewData {
-
     }
 }

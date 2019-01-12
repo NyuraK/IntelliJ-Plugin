@@ -4,14 +4,13 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.util.xmlb.annotations.Transient;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class ExpressionItem {
     public static AtomicInteger atomicInteger = new AtomicInteger();
-
-    //TODO make it with form and don't forget to adjust for 'CONSOLE ACTION'
 
     @Transient
     private String id;
@@ -21,7 +20,7 @@ public class ExpressionItem {
     private Boolean shallHide;
     private Boolean isWholeLine;
     private Boolean shallHighlight;
-    private ItemStyle style;
+    private ItemStyle style = new ItemStyle();
 
     public ExpressionItem(String id) {
         this.id = String.valueOf(atomicInteger.incrementAndGet());
@@ -56,7 +55,7 @@ public class ExpressionItem {
     public void setExpression(String expression) {
         if (this.expression == null || expression == null || !this.expression.equals(expression)) {
             this.expression = expression;
-            this.pattern = null;
+            this.pattern = Pattern.compile(expression);
         }
     }
 
@@ -94,6 +93,14 @@ public class ExpressionItem {
         result = new ConsoleViewContentType(newId, newTextAttributes);
         Cache.getInstance().put(newId, result);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpressionItem{" +
+                "expression='" + expression + '\'' +
+                ", pattern=" + pattern +
+                '}';
     }
 
     private class ItemStyle {

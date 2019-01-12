@@ -1,13 +1,18 @@
 package actions;
 
 import com.intellij.execution.ExecutionHelper;
+import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.testframework.sm.runner.ui.SMTestRunnerResultsForm;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.testframework.ui.TestResultsPanel;
 import com.intellij.execution.ui.*;
 import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
@@ -27,6 +32,7 @@ import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+@Deprecated
 public class ExpressionToolWindow implements ToolWindowFactory, DumbAware {
     public static final String TOOL_WINDOW_ID = "Nice Viewer";
     public static final Key<ExpressionWindow> NICE_VIEW_KEY = Key.create("NICE_VIEWER_KEY");
@@ -38,7 +44,6 @@ public class ExpressionToolWindow implements ToolWindowFactory, DumbAware {
         RunContentManager manager = new RunContentManagerImpl(project, DockManager.getInstance(project));
         RunContentDescriptor runContentDescriptor = manager.getSelectedContent();
         Content content = runContentDescriptor.getAttachedContent();
-
         panel.setContent(consoleView.getComponent());
 
         RunnerLayoutUi runnerLayoutUi = getRunnerLayoutUi(project, runContentDescriptor, consoleView);

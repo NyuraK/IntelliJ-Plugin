@@ -1,87 +1,130 @@
 package plugin;
 
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.filters.Filter;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.xmlb.XmlSerializerUtil;
+import com.intellij.util.xmlb.annotations.Transient;
+import highlight.HighlightFilter;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ui.ExpressionWindow;
+import stuff.ExpressionItem;
 import ui.MyForm;
 
 import javax.swing.*;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MyConfigurable implements Configurable {
+public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable> {
+    private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
 
-//    private ExpressionWindow form;
+    @Transient
     private MyForm form;
-    private RunConfigurationBase runConfigurationBase;
     private Project project;
-    @Nullable
-    private ConsoleView console;
+    private List<ExpressionItem> expressionItems = new ArrayList<>();
 
-    public MyConfigurable(Project project, ConsoleView consoleView) {
-        this.project = project;
-        this.console = consoleView;
+    private List<WeakReference<HighlightFilter>> highlightFilters = new ArrayList<>();
+
+    public static MyConfigurable getInstance() {
+        return ApplicationManager.getApplication().getComponent(MyConfigurable.class);
     }
 
-    public MyConfigurable(RunConfigurationBase runConfigurationBase) {
-        this.runConfigurationBase = runConfigurationBase;
-        project = runConfigurationBase.getProject();
+    public Filter createHighlightFilter(Project project) {
+        this.project = project;
+        HighlightFilter highlightFilter = new HighlightFilter(project, getState());
+        highlightFilters.add(new WeakReference<>(highlightFilter));
+//        System.out.println("we're in createHighlightFilter" + highlightFilter.getExpressionItem().toString());
+        return highlightFilter;
     }
 
     public void prepareForm() {
-//        form = new ExpressionWindow(this);
-        form = new MyForm();
+        form = new MyForm(this);
+    }
+
+    public List<ExpressionItem> getExpressionItems() {
+        return expressionItems;
+    }
+
+    //TODO maybe here might be another better logic (i.e. in his 'Profile' he resets list)
+    public void addExpressionItem(ExpressionItem item) {
+        System.out.println("We're adding new item to config " + item.toString());
+        this.expressionItems.add(item);
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Highlghited console";
+        return "Highlighted console";
     }
 
     @Nullable
     @Override
     public JComponent createComponent() {
         if (form == null) {
-//            form = new ExpressionWindow(this);
-            form = new MyForm();
+            form = new MyForm(this);
         }
         return form.getRootComponent();
     }
 
     @Override
     public boolean isModified() {
-        return form != null;
+        if (form.isChanged()) {
+//            new HighlightFilter(project, this);
+            return true;
+        }
+        return false;
     }
 
+    //TODO здесь кидает ошибку, мол Project is null
     @Override
     public void apply() throws ConfigurationException {
         System.out.println("Apply changes =>");
-//        Profile selectedProfile = form.getSelectedProfile();
-//        if (selectedProfile != null) {
-//            PluginState formSettings = form.getSettings();
-//            applicationComponent.loadState(getClone(formSettings));
-//
-//
-//            long selectedProfileId = selectedProfile.getId();
-//            RunConfigurationBase runConfigurationBase = this.runConfigurationBase;
-//            if (runConfigurationBase == null && console != null) {
-//                runConfigurationBase = ServiceManager.getInstance().getRunConfigurationBase(console);
-//            }
-//            if (runConfigurationBase != null) {
-//                GrepConsoleData.getGrepConsoleData(runConfigurationBase).setSelectedProfileId(selectedProfileId);
-//            }
-//            if (selectedProfileId != originalSelectedProfileId) {
-//                Profile profile = applicationComponent.getState().getProfile(selectedProfileId);
-//                if (console != null) {
-//                    serviceManager.profileChanged(console, profile);
-//                }
-//            }
-//            form.setOriginallySelectedProfileId(selectedProfileId);
-//
-//            refreshServices(currentAction);
+//        final String text = form.textField1.getText();
+        new ConsoleViewImpl(project, false);
+        loadState(this);
+    }
+
+    @Nullable
+    @Override
+    public MyConfigurable getState() {
+        return this;
+    }
+
+    @Override
+    public void loadState(@NotNull MyConfigurable state) {
+        XmlSerializerUtil.copyBean(state, this);
+    }
+
+    @NotNull
+    public String limitInputLength_andCutNewLine(@NotNull String text) {
+        int endIndex = text.length();
+        if (text.endsWith("\n")) {
+            --endIndex;
+        }
+//        if (this.isEnableMaxLengthLimit()) {
+//            endIndex = Math.min(endIndex, this.getMaxLengthToMatchAsInt());
+//        }
+        return text.substring(0, endIndex);
+    }
+
+    @NotNull
+    public CharSequence limitProcessingTime(String substring) {
+        return StringUtil.newBombedCharSequence(substring, Integer.valueOf(MAX_PROCESSING_TIME_DEFAULT));
     }
 }

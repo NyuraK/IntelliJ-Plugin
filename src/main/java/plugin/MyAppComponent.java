@@ -5,6 +5,7 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated
 public class MyAppComponent implements ApplicationComponent, PersistentStateComponent<Configuration> {
 
     private Configuration state;

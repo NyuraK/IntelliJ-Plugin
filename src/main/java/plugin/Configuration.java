@@ -7,6 +7,7 @@ import stuff.ExpressionItem;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class Configuration {
     public static final String DEFAULT = "120";
     public static final String DEFAULT_GREP = "1000";
