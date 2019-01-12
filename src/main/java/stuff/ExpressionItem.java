@@ -40,7 +40,7 @@ public class ExpressionItem {
     }
 
     public Boolean shallHide() {
-        return shallHide;
+        return false;
     }
 
     @Transient

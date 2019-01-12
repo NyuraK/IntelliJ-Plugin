@@ -3,8 +3,7 @@ package plugin;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -23,7 +22,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable> {
+@State(name = "MyConsole", storages = { @Storage(value = "MyConsole.xml") })
+public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable>, ProjectComponent {
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
 
     @Transient
@@ -44,6 +44,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 //        System.out.println("we're in createHighlightFilter" + highlightFilter.getExpressionItem().toString());
         return highlightFilter;
     }
+
 
     public void prepareForm() {
         form = new MyForm(this);
@@ -96,6 +97,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public void apply() throws ConfigurationException {
         System.out.println("Apply changes =>");
 //        final String text = form.textField1.getText();
+        //без этого и не будет работать
         new ConsoleViewImpl(project, false);
         loadState(this);
     }
@@ -127,4 +129,5 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public CharSequence limitProcessingTime(String substring) {
         return StringUtil.newBombedCharSequence(substring, Integer.valueOf(MAX_PROCESSING_TIME_DEFAULT));
     }
+
 }

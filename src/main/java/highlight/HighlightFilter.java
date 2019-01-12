@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HighlightFilter implements Filter, DumbAware {
+public class HighlightFilter implements Filter {
 
     private Project project;
     private MyConfigurable configuration;
@@ -54,9 +54,10 @@ public class HighlightFilter implements Filter, DumbAware {
 
     private final FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
-            System.out.println("We entered FilterState filter(@Nullable String text, int offset");
             String substring = configuration.limitInputLength_andCutNewLine(text);
+            System.out.println("substring: " + substring);
             CharSequence charSequence = configuration.limitProcessingTime(substring);
+            System.out.println(charSequence.toString());
 
             FilterState state = new FilterState(offset, text, configuration, charSequence);
             for (ExpressionProcessor processor : expressionProcessors) {

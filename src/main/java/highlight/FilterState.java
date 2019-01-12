@@ -65,11 +65,9 @@ public class FilterState {
     }
 
     public void executeAction(ExpressionItem expressionItem) {
-
         if (expressionItem.shallHide()) {
             setExclude(true);
         }
-
         setMatchesSomething(true);
 
     }
