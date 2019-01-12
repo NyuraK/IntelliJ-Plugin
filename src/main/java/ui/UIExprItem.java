@@ -1,12 +1,9 @@
 package ui;
 
-import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.ColorChooser;
-import com.intellij.ui.ColorPicker;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBCheckBox;
 import plugin.MyConfigurable;
@@ -42,7 +39,7 @@ public class UIExprItem extends JPanel {
         item.setStyle(Color.BLACK, Color.BLUE);
         item.setWholeLine(true);
         item.setExpression(text);
-        configuration.addExpressionItem(item);
+        configuration.setExpressionItems(item);
 //        addExpItem(Color.BLUE);
 
 
@@ -82,7 +79,7 @@ public class UIExprItem extends JPanel {
         item.setStyle(JBColor.BLACK, color);
         item.setWholeLine(true);
 //        item.setExpression();
-        configuration.addExpressionItem(item);
+        configuration.setExpressionItems(item);
     }
 
 }

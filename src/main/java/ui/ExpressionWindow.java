@@ -1,14 +1,8 @@
 package ui;
 
-import com.intellij.ui.ColorChooser;
-import com.intellij.ui.components.JBScrollPane;
-import plugin.Configuration;
 import plugin.MyConfigurable;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,9 +12,6 @@ public class ExpressionWindow extends JFrame {
     private JButton addButton;
     private JTextField textField1;
     private JPanel panel;
-    //    private UIExprItem UIExprItem1;
-
-    private Configuration configuration;
 
     public ExpressionWindow(MyConfigurable configurable) {
         addButton.addActionListener(new ActionListener() {

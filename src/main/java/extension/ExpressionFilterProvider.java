@@ -1,15 +1,12 @@
 package extension;
 
-import com.intellij.execution.console.ConsoleViewWrapperBase;
 import com.intellij.execution.filters.ConsoleDependentFilterProvider;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import plugin.MyConfigurable;
-import plugin.ServiceManager;
 
 
 public class ExpressionFilterProvider extends ConsoleDependentFilterProvider {

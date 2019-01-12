@@ -6,7 +6,7 @@ import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.Nullable;
-import stuff.Kit;
+import stuff.Utils;
 
 public class Rehighlighter {
     public static final Filter FILTER = new Filter() {
@@ -43,7 +43,7 @@ public class Rehighlighter {
 
     private void highlightAll(ConsoleViewImpl consoleViewImpl, Editor editor) {
         try {
-            Filter myCustomFilter = (Filter) Kit.getPropertyValue(consoleViewImpl, "myFilters");
+            Filter myCustomFilter = (Filter) Utils.getPropertyValue(consoleViewImpl, "myFilters");
 
             int lineCount = editor.getDocument().getLineCount();
             if (lineCount > 0) {

@@ -7,7 +7,7 @@ import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import plugin.MyConfigurable;
-import stuff.Kit;
+import stuff.Utils;
 
 import javax.swing.*;
 
@@ -110,7 +110,7 @@ public class ConsoleAction extends DumbAwareAction {
 //    }
 
     private String getExpression(AnActionEvent e) {
-        String s = Kit.getSelectedString(e);
+        String s = Utils.getSelectedString(e);
         if (s == null)
             s = "";
         if (s.endsWith("\n")) {

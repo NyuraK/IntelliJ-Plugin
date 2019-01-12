@@ -10,7 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 
-public class Kit {
+public class Utils {
     public static final String NESTED_PROPERTY_SEPARATOR = ".";
 
     public static String getSelectedString(AnActionEvent e) {
@@ -27,7 +27,7 @@ public class Kit {
     public static Object getPropertyValue(Object bean, String propertyPath) throws NoSuchFieldException {
         if (bean == null)
             throw new IllegalArgumentException("bean cannot be null");
-        Field field = Kit.getField(bean.getClass(), propertyPath);
+        Field field = Utils.getField(bean.getClass(), propertyPath);
         field.setAccessible(true);
         try {
             return (field.get(bean));

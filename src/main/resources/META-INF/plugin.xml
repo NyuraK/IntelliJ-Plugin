@@ -11,7 +11,7 @@
         <consoleFilterProvider order="first" implementation="extension.ExpressionFilterProvider"/>
         <consoleActionsPostProcessor implementation="extension.ExpressionActionPostProcessor"/>
         <projectConfigurable id="MyConsole" instance="plugin.MyConfigurable" groupId="build"/>
-        <runConfigurationExtension implementation="extension.RunConfigExtension"/>
+        <projectService serviceInterface="plugin.MyConfigurable" serviceImplementation="plugin.MyConfigurable"/>
     </extensions>
 
     <actions>
