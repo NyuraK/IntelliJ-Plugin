@@ -4,9 +4,7 @@ import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.NotNull;
-import plugin.Configuration;
 import plugin.MyConfigurable;
-import stuff.ExpressionItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +13,12 @@ public class FilterState {
     private int offset;
     protected ConsoleViewContentType consoleViewContentType;
     protected List<Filter.ResultItem> resultItemList;
-    private boolean exclude;
     private boolean matchesSomething;
-    private String text;
     private final MyConfigurable configuration;
     private CharSequence charSequence;
-    private boolean textChanged;
 
-    public FilterState(int offset, String text, MyConfigurable configuration, CharSequence charSequence) {
+    public FilterState(int offset, MyConfigurable configuration, CharSequence charSequence) {
         this.offset = offset;
-        this.text = text;
         this.configuration = configuration;
         this.charSequence = charSequence;
     }
@@ -64,17 +58,6 @@ public class FilterState {
         return resultItemList.add(resultItem);
     }
 
-    public void executeAction(ExpressionItem expressionItem) {
-        if (expressionItem.shallHide()) {
-            setExclude(true);
-        }
-        setMatchesSomething(true);
-
-    }
-
-    public void setExclude(boolean exclude) {
-        this.exclude = exclude;
-    }
 
     public void setMatchesSomething(boolean matchesSomething) {
         this.matchesSomething = matchesSomething;

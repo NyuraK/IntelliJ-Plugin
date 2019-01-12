@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import plugin.Configuration;
 import plugin.ExpressionProcessor;
 import plugin.MyConfigurable;
 import stuff.ExpressionItem;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HighlightFilter implements Filter {
+public class HighlightFilter implements Filter, DumbAware {
 
     private Project project;
     private MyConfigurable configuration;
@@ -55,11 +54,9 @@ public class HighlightFilter implements Filter {
     private final FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
             String substring = configuration.limitInputLength_andCutNewLine(text);
-            System.out.println("substring: " + substring);
             CharSequence charSequence = configuration.limitProcessingTime(substring);
-            System.out.println(charSequence.toString());
 
-            FilterState state = new FilterState(offset, text, configuration, charSequence);
+            FilterState state = new FilterState(offset, configuration, charSequence);
             for (ExpressionProcessor processor : expressionProcessors) {
                     state = processor.process(state);
             }

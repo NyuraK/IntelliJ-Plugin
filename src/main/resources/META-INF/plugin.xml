@@ -10,6 +10,8 @@
         <!--<toolWindow id="Grep Viewer" icon="/network.png" anchor="bottom" factoryClass="actions.ExpressionToolWindow"></toolWindow>-->
         <consoleFilterProvider order="first" implementation="extension.ExpressionFilterProvider"/>
         <consoleActionsPostProcessor implementation="extension.ExpressionActionPostProcessor"/>
+        <projectConfigurable id="MyConsole" instance="plugin.MyConfigurable" groupId="build"/>
+        <runConfigurationExtension implementation="extension.RunConfigExtension"/>
     </extensions>
 
     <actions>

@@ -32,7 +32,7 @@ public class ExpressionProcessor {
     public FilterState process(FilterState state) {
         if (expressionItem.isEnabled() && !StringUtils.isEmpty(expressionItem.getExpression())) {
             CharSequence input = state.getCharSequence();
-            if (!expressionItem.isWholeLine()) { //not whole line
+            if (expressionItem.isWholeLine()) { //not whole line
                 Pattern pattern = expressionItem.getPattern();
                 if (pattern != null) {
                     final Matcher matcher = pattern.matcher(input);
@@ -40,7 +40,7 @@ public class ExpressionProcessor {
                         matches++;
                         final int start = matcher.start();
                         final int end = matcher.end();
-                        state.executeAction(expressionItem);
+                        state.setMatchesSomething(true);
                         Filter.Result resultItem = new Filter.Result
                                 (state.getOffset() + start, state.getOffset() + end,
                                 null, expressionItem.getConsoleViewContentType(null).getAttributes());
@@ -48,11 +48,12 @@ public class ExpressionProcessor {
                         state.add(resultItem);
                     }
                 }
-            } else if (matches(input)) {//whole line
+            }
+            else if (matches(input)) {//whole line
                 matches++;
                 state.setConsoleViewContentType(
                         expressionItem.getConsoleViewContentType(state.getConsoleViewContentType()));
-                state.executeAction(expressionItem);
+                state.setMatchesSomething(true);
             }
         }
         return state;

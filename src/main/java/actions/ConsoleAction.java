@@ -1,24 +1,15 @@
 package actions;
 
-import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.RunnerLayoutUi;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import plugin.MyConfigurable;
 import stuff.Kit;
-import ui.ExpressionWindow;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.OutputStream;
 
 public class ConsoleAction extends DumbAwareAction {
     public static final Icon ICON = IconLoader.getIcon("/network.png");
@@ -36,8 +27,32 @@ public class ConsoleAction extends DumbAwareAction {
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
         MyConfigurable.getInstance().prepareForm();
+        MyConfigurable.getInstance().setConsole(consoleView);
         ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfigurable.getInstance(), true);
     }
+
+
+//    @Override
+//    public void update(AnActionEvent e) {
+//        Presentation presentation = e.getPresentation();
+//        boolean enabled = false;
+//
+//        Project eventProject = getEventProject(e);
+//        ConsoleViewImpl parentConsoleView = (ConsoleViewImpl) getConsoleView(e);
+//        if (parentConsoleView != null) {
+//            GrepCopyingFilter copyingFilter = ServiceManager.getInstance().getCopyingFilter(parentConsoleView);
+//            if (eventProject != null && copyingFilter != null) {
+//                RunContentDescriptor runContentDescriptor = OpenGrepConsoleAction.getRunContentDescriptor(eventProject, parentConsoleView);
+//                if (runContentDescriptor != null) {
+//                    RunnerLayoutUi runnerLayoutUi = getRunnerLayoutUi(eventProject, runContentDescriptor, parentConsoleView);
+//                    enabled = runnerLayoutUi != null;
+//                }
+//            }
+//        }
+//
+//        presentation.setEnabled(enabled);
+//
+//    }
 
 //    private ConsoleView createConsole(@NotNull Project project, ConsoleViewImpl consoleView, MyProcessHandler processHandler) {
 //        ConsoleView console = new ConsoleViewImpl(project, false);
