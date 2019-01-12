@@ -22,8 +22,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-@State(name = "MyConsole", storages = { @Storage(value = "MyConsole.xml") })
-public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable>, ProjectComponent {
+public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable> {
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
 
     @Transient
@@ -97,6 +96,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public void apply() throws ConfigurationException {
         System.out.println("Apply changes =>");
 //        final String text = form.textField1.getText();
+
         //без этого и не будет работать
         new ConsoleViewImpl(project, false);
         loadState(this);

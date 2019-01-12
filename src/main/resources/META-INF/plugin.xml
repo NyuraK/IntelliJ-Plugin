@@ -33,10 +33,5 @@
         </component>
     </application-components>
 
-    <project-components>
-        <component>
-            <implementation-class>plugin.MyConfigurable</implementation-class>
-        </component>
-    </project-components>
 
 </idea-plugin>
