@@ -12,7 +12,7 @@ import stuff.Utils;
 import javax.swing.*;
 
 public class ConsoleAction extends DumbAwareAction {
-    public static final Icon ICON = IconLoader.getIcon("/network.png");
+    public static final Icon ICON = IconLoader.getIcon("/paint-brush.png");
     private ConsoleView consoleView;
 
     public ConsoleAction() {

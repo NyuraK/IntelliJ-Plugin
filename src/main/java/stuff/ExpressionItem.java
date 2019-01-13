@@ -16,30 +16,16 @@ public class ExpressionItem {
     private String expression;
     private transient Pattern pattern;
     //there it works only after re-running
-    private Boolean shallHide;
-    private Boolean isWholeLine;
-    private Boolean shallHighlight;
     private ItemStyle style = new ItemStyle();
 
-    public ExpressionItem(String id) {
+    public ExpressionItem() {
         this.id = String.valueOf(atomicInteger.incrementAndGet());
     }
 
-    public void setStyle(Color foreground, Color background) {
+    public ExpressionItem setStyle(Color foreground, Color background) {
         this.style.setForeground(foreground);
         this.style.setBackground(background);
-    }
-
-    public void setWholeLine(Boolean wholeLine) {
-        isWholeLine = wholeLine;
-    }
-
-    public Boolean isWholeLine() {
-        return isWholeLine;
-    }
-
-    public Boolean shallHide() {
-        return false;
+        return this;
     }
 
     @Transient
@@ -51,11 +37,12 @@ public class ExpressionItem {
         return expression;
     }
 
-    public void setExpression(String expression) {
+    public ExpressionItem setExpression(String expression) {
         if (this.expression == null || expression == null || !this.expression.equals(expression)) {
             this.expression = expression;
             this.pattern = Pattern.compile(expression);
         }
+        return this;
     }
 
     public Pattern getPattern() {
@@ -98,8 +85,12 @@ public class ExpressionItem {
     public String toString() {
         return "ExpressionItem{" +
                 "expression='" + expression + '\'' +
-                ", pattern=" + pattern +
+                ", id=" + id +
                 '}';
+    }
+
+    public Color getColor() {
+        return style.background;
     }
 
     private class ItemStyle {
@@ -127,6 +118,6 @@ public class ExpressionItem {
     @Override
     public boolean equals(Object obj) {
         ExpressionItem item = (ExpressionItem) obj;
-        return this.expression.equals(item.expression);
+        return this.id.equals(item.id);
     }
 }

@@ -1,20 +1,11 @@
 package highlight;
 
-import com.intellij.execution.filters.Filter;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.editor.Editor;
-import org.jetbrains.annotations.Nullable;
 
 public class Rehighlighter {
-    public static final Filter FILTER = new Filter() {
-        @Nullable
-        @Override
-        public Result applyFilter(String s, int i) {
-            return null;
-        }
-    };
 
     public void resetHighlights(ConsoleView console) {
         if (console instanceof ConsoleViewImpl) {

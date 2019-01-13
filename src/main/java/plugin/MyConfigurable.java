@@ -37,13 +37,11 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     private List<ExpressionItem> expressionItems = new ArrayList<>();
 
     @Transient
-    private MyForm form;
+    public MyForm form;
     @Transient
     private Project project;
     @Transient
     private ConsoleView console;
-    @Transient
-    private boolean applyOnDelete = false;
 
     public MyConfigurable() {
 
@@ -56,7 +54,6 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public HighlightFilter createHighlightFilter(Project project) {
         this.project = project;
         HighlightFilter highlightFilter = new HighlightFilter(project, getState());
-        System.out.println("highlightFilter's size " + highlightFilter.getExpressionItem());
         return highlightFilter;
     }
 
@@ -70,14 +67,6 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
         if (!expressionItems.contains(item)) {
             this.expressionItems.add(item);
         }
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -102,15 +91,11 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     @Override
     public void apply() throws ConfigurationException {
-        if (console != null && isModified()) {
-            System.out.println(console);
+        if (console != null) {
             createHighlightFilterIfMissing(console);
             new Rehighlighter().resetHighlights(console);
         }
-//        if (applyOnDelete) {
-//            new Rehighlighter().removeAllHighlighters(console);
-//            applyOnDelete = false;
-//        }
+
     }
 
     @NotNull
@@ -158,13 +143,5 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
                 i.remove();
             }
         }
-
-//        applyOnDelete = true;
-//        try {
-//            apply();
-//        } catch (ConfigurationException e) {
-//            e.printStackTrace();
-//        }
     }
-
 }

@@ -2,7 +2,6 @@ package highlight;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -16,30 +15,43 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class HighlightFilter implements Filter, DumbAware {
+public class HighlightFilter implements Filter {
 
     private Project project;
     private MyConfigurable configuration;
     private List<ExpressionProcessor> expressionProcessors;
     private ConsoleViewContentType lastTextAttributes = null;
+    private boolean onDelete;
 
     public HighlightFilter(@NotNull Project project, MyConfigurable configuration) {
         this.project = project;
         this.configuration = configuration;
         expressionProcessors = new ArrayList<>();
         for (ExpressionItem item : configuration.getExpressionItems()) {
-            if (!expressionProcessors.contains(item)){
+            if (!contains(item)) {
                 expressionProcessors.add(new ExpressionProcessor(item));
-                System.out.println("Adding to processor"+item.toString());
+                System.out.println("Adding to processor " + item.toString());
             }
         }
     }
 
-    public boolean removeFromProcessorsList(ExpressionItem onDelete) {
+    public HighlightFilter(@NotNull Project project, MyConfigurable configuration, boolean onDelete) {
+        this.project = project;
+        this.configuration = configuration;
+        expressionProcessors = new ArrayList<>();
+        for (ExpressionItem item : configuration.getExpressionItems()) {
+            if (!contains(item)) {
+                expressionProcessors.add(new ExpressionProcessor(item));
+                System.out.println("Adding to processor " + item.toString());
+            }
+        }
+        this.onDelete = onDelete;
+    }
+
+    private boolean contains(ExpressionItem onDelete) {
         for (Iterator<ExpressionProcessor> i = expressionProcessors.iterator(); i.hasNext(); ) {
             ExpressionProcessor item = i.next();
             if (item.getExpressionItem().equals(onDelete)) {
-                i.remove();
                 return true;
             }
         }
@@ -64,7 +76,7 @@ public class HighlightFilter implements Filter, DumbAware {
         return result;
     }
 
-    private final FilterState filter(@Nullable String text, int offset) {
+    private FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
             String substring = configuration.limitInputLength_andCutNewLine(text);
             CharSequence charSequence = configuration.limitProcessingTime(substring);

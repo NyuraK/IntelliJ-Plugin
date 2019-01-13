@@ -20,7 +20,6 @@ public class ExpressionProcessor {
         return expressionItem;
     }
 
-    @SuppressWarnings("Duplicates")
     public FilterState process(FilterState state) {
         if (expressionItem.isEnabled() && !StringUtils.isEmpty(expressionItem.getExpression())) {
             CharSequence input = state.getCharSequence();
@@ -34,7 +33,6 @@ public class ExpressionProcessor {
                     Filter.Result resultItem = new Filter.Result
                             (state.getOffset() + start, state.getOffset() + end,
                             null, expressionItem.getConsoleViewContentType(null).getAttributes());
-
                     state.add(resultItem);
                 }
             }

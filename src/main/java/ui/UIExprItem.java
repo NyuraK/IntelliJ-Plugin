@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBCheckBox;
 import plugin.MyConfigurable;
 import stuff.ExpressionItem;
@@ -15,8 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UIExprItem extends JPanel {
+    private static UIExprItem ourInstance = new UIExprItem();
 
-    public static final Icon ICON = IconLoader.getIcon("/rubbish-bin.png");
+    private static final Icon ICON = IconLoader.getIcon("/rubbish-bin.png");
     private MyConfigurable configuration;
     private JLabel expression;
     private JButton picker = new JButton();
@@ -24,39 +24,53 @@ public class UIExprItem extends JPanel {
     private JCheckBox highlightOnlyMatching = new JBCheckBox();
     ExpressionItem item;
 
-    public UIExprItem(String text, MyConfigurable configuration) {
+    private UIExprItem(){}
+
+    public static UIExprItem getInstance() {
+        return ourInstance;
+    }
+
+    public UIExprItem(String text, Color color, MyConfigurable configuration) {
         this.configuration = configuration;
         expression = new JLabel(text);
-        picker.setBackground(Color.DARK_GRAY);
+        picker.setBackground(color);
+        picker.setForeground(color);
+        picker.setEnabled(false);
         deleteBtn.setIcon(ICON);
+        deleteBtn.setBorder(BorderFactory.createEmptyBorder());
 
         this.add(expression);
         this.add(picker);
         this.add(deleteBtn);
         this.add(highlightOnlyMatching);
 
-        item = new ExpressionItem(text);
-        item.setStyle(Color.BLACK, Color.BLUE);
-        item.setWholeLine(true);
+        item = new ExpressionItem();
+        item.setStyle(Color.BLACK, color);
         item.setExpression(text);
         configuration.setExpressionItems(item);
 
         addListeners();
     }
 
+
     private void addListeners() {
-        picker.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                Color color = ColorPicker.showDialog(rootComponent(configuration.getProject()), "Background color", Color.BLUE, true, null, true);
-//                picker.setBackground(color);
-//                addExpItem(color);
-            }
-        });
 
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JPanel panel = configuration.form.getPanel();
+                Component[] componentList = panel.getComponents();
+                for(Component c : componentList){
+                    if(c instanceof UIExprItem){
+                        if (((UIExprItem) c).expression.getText().equals(expression.getText())) {
+                            panel.remove(c);
+                        }
+                    }
+                }
+                configuration.form.getRootComponent().revalidate();
+                configuration.form.getRootComponent().repaint();
+                configuration.setExpressionItems(new ExpressionItem()
+                        .setStyle(Color.BLACK, Color.white).setExpression(item.getExpression()));
                 configuration.deleteItem(item);
             }
         });
@@ -73,11 +87,5 @@ public class UIExprItem extends JPanel {
         return frame != null ? frame.getRootPane() : null;
     }
 
-    private void addExpItem(Color color) {
-        item.setStyle(JBColor.BLACK, color);
-        item.setWholeLine(true);
-//        item.setExpression();
-        configuration.setExpressionItems(item);
-    }
 
 }
