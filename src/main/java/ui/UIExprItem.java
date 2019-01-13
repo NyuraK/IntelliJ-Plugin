@@ -42,7 +42,6 @@ public class UIExprItem extends JPanel {
         configuration.setExpressionItems(item);
 //        addExpItem(Color.BLUE);
 
-
         addListeners();
     }
 

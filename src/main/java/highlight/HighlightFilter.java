@@ -39,7 +39,6 @@ public class HighlightFilter implements Filter, DumbAware {
     @Nullable
     @Override
     public Result applyFilter(String line, int entireLength) {
-        System.out.println("We entered apply" + line);
         int offset = entireLength;
         if (line != null)
             offset = entireLength-line.length();

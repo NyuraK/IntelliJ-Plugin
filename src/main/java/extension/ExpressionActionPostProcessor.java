@@ -18,7 +18,6 @@ public class ExpressionActionPostProcessor extends ConsoleActionsPostProcessor {
     @Override
     public AnAction[] postProcess(@NotNull ConsoleView console, @NotNull AnAction[] actions) {
 //        MyConfigurable.getInstance().createHighlightFilterIfMissing(console);
-
         ArrayList<AnAction> anActions = new ArrayList<>();
         anActions.add(new ConsoleAction(console));
         anActions.addAll(Arrays.asList(actions));
