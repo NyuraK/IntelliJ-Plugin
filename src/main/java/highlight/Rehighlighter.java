@@ -6,7 +6,6 @@ import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.Nullable;
-import stuff.Utils;
 
 public class Rehighlighter {
     public static final Filter FILTER = new Filter() {
@@ -26,32 +25,20 @@ public class Rehighlighter {
         }
     }
 
-
-    public void removeAllHighlighters(Editor editor) {
+    public void removeAllHighlighters(ConsoleView console) {
+        Editor editor = ((ConsoleViewImpl) console).getEditor();
         if (editor != null) {
             editor.getMarkupModel().removeAllHighlighters();
         }
+        ((ConsoleViewImpl) console).revalidate();
     }
 
     private void reset(ConsoleViewImpl consoleViewImpl) {
         Editor editor = consoleViewImpl.getEditor();
-        if (editor != null) {//disposed are null - may be bug
-            removeAllHighlighters(editor);
-            highlightAll(consoleViewImpl, editor);
+        if (editor != null) {
+            editor.getMarkupModel().removeAllHighlighters();
+            consoleViewImpl.rehighlightHyperlinksAndFoldings();
+            consoleViewImpl.revalidate();
         }
     }
-
-    private void highlightAll(ConsoleViewImpl consoleViewImpl, Editor editor) {
-        try {
-            Filter myCustomFilter = (Filter) Utils.getPropertyValue(consoleViewImpl, "myFilters");
-
-            int lineCount = editor.getDocument().getLineCount();
-            if (lineCount > 0) {
-                consoleViewImpl.getHyperlinks().highlightHyperlinks(myCustomFilter, FILTER, 0, lineCount - 1);
-            }
-        } catch (NoSuchFieldException e1) {
-            throw new RuntimeException("IJ API was probably changed, update the plugin or report it", e1);
-        }
-    }
-
 }

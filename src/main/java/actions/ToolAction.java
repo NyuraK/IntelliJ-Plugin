@@ -15,7 +15,7 @@ public class ToolAction extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-        MyConfigurable.getInstance().prepareForm();
+//        MyConfigurable.getInstance().prepareForm();
         ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfigurable.getInstance(), true);
     }
 }

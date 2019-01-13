@@ -4,7 +4,6 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.util.xmlb.annotations.Transient;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -123,5 +122,11 @@ public class ExpressionItem {
         public void setBackground(Color background) {
             this.background = background;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        ExpressionItem item = (ExpressionItem) obj;
+        return this.expression.equals(item.expression);
     }
 }

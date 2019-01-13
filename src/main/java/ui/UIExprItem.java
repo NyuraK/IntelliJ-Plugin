@@ -40,7 +40,6 @@ public class UIExprItem extends JPanel {
         item.setWholeLine(true);
         item.setExpression(text);
         configuration.setExpressionItems(item);
-//        addExpItem(Color.BLUE);
 
         addListeners();
     }
@@ -58,7 +57,7 @@ public class UIExprItem extends JPanel {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("DELETE");
+                configuration.deleteItem(item);
             }
         });
     }

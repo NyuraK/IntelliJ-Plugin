@@ -2,7 +2,6 @@ package plugin;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.ide.ui.AppearanceConfigurable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -21,11 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stuff.ExpressionItem;
 import ui.MyForm;
-import ui.UIExprItem;
 
 import javax.swing.*;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @State(
@@ -38,11 +36,14 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public static final int maxLengthToMatch = 120;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
 
-//    @Transient
+    @Transient
     private MyForm form;
+    @Transient
     private Project project;
+    @Transient
     private ConsoleView console;
-    private List<WeakReference<HighlightFilter>> highlightFilters = new ArrayList<>();
+    @Transient
+    private boolean applyOnDelete = false;
 
     public MyConfigurable() {
 
@@ -55,15 +56,10 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public HighlightFilter createHighlightFilter(Project project) {
         this.project = project;
         HighlightFilter highlightFilter = new HighlightFilter(project, getState());
-        highlightFilters.add(new WeakReference<>(highlightFilter));
+        System.out.println("highlightFilter's size " + highlightFilter.getExpressionItem());
         return highlightFilter;
     }
 
-
-    public void prepareForm() {
-//        form = new MyForm(this);
-        createComponent();
-    }
 
     public List<ExpressionItem> getExpressionItems() {
         return expressionItems;
@@ -71,7 +67,9 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     //TODO maybe here might be another better logic (i.e. in his 'Profile' he resets list)
     public void setExpressionItems(ExpressionItem item) {
-        this.expressionItems.add(item);
+        if (!expressionItems.contains(item)) {
+            this.expressionItems.add(item);
+        }
     }
 
     public Project getProject() {
@@ -91,7 +89,6 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     @Nullable
     @Override
     public JComponent createComponent() {
-        System.out.println("We're in Configurable createComponent()");
         if (form == null) {
             form = new MyForm(this);
         }
@@ -105,10 +102,15 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     @Override
     public void apply() throws ConfigurationException {
-        if (console != null) {
+        if (console != null && isModified()) {
+            System.out.println(console);
             createHighlightFilterIfMissing(console);
             new Rehighlighter().resetHighlights(console);
         }
+//        if (applyOnDelete) {
+//            new Rehighlighter().removeAllHighlighters(console);
+//            applyOnDelete = false;
+//        }
     }
 
     @NotNull
@@ -148,4 +150,21 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public void loadState(@NotNull MyConfigurable state) {
         XmlSerializerUtil.copyBean(state, this);
     }
+
+    public void deleteItem(ExpressionItem delete) {
+        for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
+            ExpressionItem item = i.next();
+            if (item.equals(delete)) {
+                i.remove();
+            }
+        }
+
+//        applyOnDelete = true;
+//        try {
+//            apply();
+//        } catch (ConfigurationException e) {
+//            e.printStackTrace();
+//        }
+    }
+
 }

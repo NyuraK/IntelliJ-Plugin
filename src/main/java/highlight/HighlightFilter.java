@@ -13,6 +13,7 @@ import stuff.ExpressionItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class HighlightFilter implements Filter, DumbAware {
@@ -27,13 +28,26 @@ public class HighlightFilter implements Filter, DumbAware {
         this.configuration = configuration;
         expressionProcessors = new ArrayList<>();
         for (ExpressionItem item : configuration.getExpressionItems()) {
-            expressionProcessors.add(new ExpressionProcessor(item));
-            System.out.println(item.toString());
+            if (!expressionProcessors.contains(item)){
+                expressionProcessors.add(new ExpressionProcessor(item));
+                System.out.println("Adding to processor"+item.toString());
+            }
         }
     }
 
-    public ExpressionItem getExpressionItem() {
-        return expressionProcessors.get(0).getExpressionItem();
+    public boolean removeFromProcessorsList(ExpressionItem onDelete) {
+        for (Iterator<ExpressionProcessor> i = expressionProcessors.iterator(); i.hasNext(); ) {
+            ExpressionProcessor item = i.next();
+            if (item.getExpressionItem().equals(onDelete)) {
+                i.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getExpressionItem() {
+        return expressionProcessors.size();
     }
 
     @Nullable

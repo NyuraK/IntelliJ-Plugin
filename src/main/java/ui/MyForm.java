@@ -12,7 +12,7 @@ public class MyForm {
     private JButton addButton = new JButton("Add");
     public JTextField textField1 = new JTextField();
     private JPanel panel = new JPanel();
-    private Boolean changed = false;
+    private boolean changed = false;
 
     private MyConfigurable configuration;
 
@@ -36,6 +36,7 @@ public class MyForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String expression = textField1.getText();
+                //TODO проверять на наличие
                 if (!expression.isEmpty()) {
                     panel.add(new UIExprItem(expression, configuration));
                     root.revalidate();
@@ -54,7 +55,7 @@ public class MyForm {
     }
 
     public boolean isChanged() {
-        return changed;
+        return changed |= changed;
     }
 
 }

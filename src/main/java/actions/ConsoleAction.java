@@ -26,7 +26,7 @@ public class ConsoleAction extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-        MyConfigurable.getInstance().prepareForm();
+//        MyConfigurable.getInstance().prepareForm();
         MyConfigurable.getInstance().setConsole(consoleView);
         ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfigurable.getInstance(), true);
     }
