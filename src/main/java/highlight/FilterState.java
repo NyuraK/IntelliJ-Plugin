@@ -4,6 +4,7 @@ import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.NotNull;
+import plugin.MyConfigurable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,12 @@ public class FilterState {
     protected ConsoleViewContentType consoleViewContentType;
     protected List<Filter.ResultItem> resultItemList;
     private boolean matchesSomething;
+    private final MyConfigurable configuration;
     private CharSequence charSequence;
 
-    public FilterState(int offset, CharSequence charSequence) {
+    public FilterState(int offset, MyConfigurable configuration, CharSequence charSequence) {
         this.offset = offset;
+        this.configuration = configuration;
         this.charSequence = charSequence;
     }
 

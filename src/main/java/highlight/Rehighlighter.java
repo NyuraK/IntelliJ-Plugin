@@ -21,7 +21,7 @@ public class Rehighlighter {
         if (editor != null) {
             editor.getMarkupModel().removeAllHighlighters();
         }
-//        ((ConsoleViewImpl) console).revalidate();
+        ((ConsoleViewImpl) console).revalidate();
     }
 
     private void reset(ConsoleViewImpl consoleViewImpl) {

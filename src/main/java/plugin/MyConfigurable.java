@@ -13,8 +13,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
-import highlight.GrepRe;
 import highlight.HighlightFilter;
+import highlight.Rehighlighter;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +42,6 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     private Project project;
     @Transient
     private ConsoleView console;
-    @Transient
-    private Operation operation = Operation.NONE;
 
     public MyConfigurable() {
 
@@ -55,40 +53,20 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     public HighlightFilter createHighlightFilter(Project project) {
         this.project = project;
-        HighlightFilter highlightFilter = new HighlightFilter(project);
+        HighlightFilter highlightFilter = new HighlightFilter(project, getState());
         return highlightFilter;
     }
+
 
     public List<ExpressionItem> getExpressionItems() {
         return expressionItems;
     }
 
     //TODO maybe here might be another better logic (i.e. in his 'Profile' he resets list)
-    public boolean setExpressionItems(ExpressionItem item) {
+    public void setExpressionItems(ExpressionItem item) {
         if (!expressionItems.contains(item)) {
-            if (isTherePlain(item)) deletePlain(item);
-            expressionItems.add(item);
-            return true;
+            this.expressionItems.add(item);
         }
-        return false;
-    }
-
-    private void deletePlain(ExpressionItem delete) {
-        for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
-            ExpressionItem item = i.next();
-            if (item.getExpression().equals(delete.getExpression())) {
-                i.remove();
-                return;
-            }
-        }
-    }
-
-    private boolean isTherePlain(ExpressionItem item) {
-        for (ExpressionItem i : expressionItems) {
-            if (item.getExpression().equals(i.getExpression()))
-                return true;
-        }
-        return false;
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -101,7 +79,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     @Override
     public JComponent createComponent() {
         if (form == null) {
-            form = new MyForm();
+            form = new MyForm(this);
         }
         return form.getRootComponent();
     }
@@ -113,25 +91,11 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     @Override
     public void apply() throws ConfigurationException {
-        if (form != null) {
+        if (console != null) {
             createHighlightFilterIfMissing(console);
-            new GrepRe().resetHighlights(console);
-//            if (operation == Operation.ADD) {
-//                createHighlightFilterIfMissing(console);
-//                new Rehighlighter().resetHighlights(console);
-//            }
-//            else if (operation == Operation.DELETE) {
-////                new Rehighlighter().resetHighlights(console);
-//                createHighlightFilterIfMissing(console);
-//                for (int i = 0; i < 5; i++)
-//                    new Rehighlighter().resetHighlights(console);
-//            }
-//            else {
-//                createHighlightFilterIfMissing(console);
-//                new Rehighlighter().resetHighlights(console);
-//            }
-//            operation = Operation.NONE;
+            new Rehighlighter().resetHighlights(console);
         }
+
     }
 
     @NotNull
@@ -148,6 +112,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     public CharSequence limitProcessingTime(String substring) {
         return StringUtil.newBombedCharSequence(substring, Integer.valueOf(MAX_PROCESSING_TIME_DEFAULT));
     }
+
 
     public void setConsole(ConsoleView consoleView) {
         this.console = consoleView;
@@ -172,17 +137,11 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     }
 
     public void deleteItem(ExpressionItem delete) {
-
         for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
             ExpressionItem item = i.next();
             if (item.equals(delete)) {
                 i.remove();
             }
         }
-
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
     }
 }
