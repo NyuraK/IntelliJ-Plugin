@@ -15,6 +15,7 @@ public class ExpressionItem {
     private String id;
     private String expression;
     private transient Pattern pattern;
+    private boolean isCaseSensitive;
     //there it works only after re-running
     private ItemStyle style = new ItemStyle();
 
@@ -37,15 +38,27 @@ public class ExpressionItem {
         return expression;
     }
 
+    public ExpressionItem setCaseSensitive(boolean caseSensitive) {
+        isCaseSensitive = caseSensitive;
+        return this;
+    }
+
     public ExpressionItem setExpression(String expression) {
         if (this.expression == null || expression == null || !this.expression.equals(expression)) {
             this.expression = expression;
-            this.pattern = Pattern.compile(expression);
+            this.pattern = Pattern.compile(expression, computeFlags());
         }
         return this;
     }
 
+    private int computeFlags() {
+        return isCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+    }
+
     public Pattern getPattern() {
+        if (pattern == null && expression != null) {
+            pattern = Pattern.compile(expression, computeFlags());
+        }
         return pattern;
     }
 

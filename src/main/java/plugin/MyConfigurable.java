@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stuff.ExpressionItem;
+import stuff.Operation;
 import ui.MyForm;
 
 import javax.swing.*;
@@ -42,6 +43,8 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     private Project project;
     @Transient
     private ConsoleView console;
+    @Transient
+    private Operation operation = Operation.NONE;
 
     public MyConfigurable() {
 
@@ -53,7 +56,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     public HighlightFilter createHighlightFilter(Project project) {
         this.project = project;
-        HighlightFilter highlightFilter = new HighlightFilter(project, getState());
+        HighlightFilter highlightFilter = new HighlightFilter(project);
         return highlightFilter;
     }
 
@@ -79,7 +82,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     @Override
     public JComponent createComponent() {
         if (form == null) {
-            form = new MyForm(this);
+            form = new MyForm();
         }
         return form.getRootComponent();
     }
@@ -92,8 +95,17 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     @Override
     public void apply() throws ConfigurationException {
         if (console != null) {
-            createHighlightFilterIfMissing(console);
-            new Rehighlighter().resetHighlights(console);
+            if (operation == Operation.ADD) {
+                createHighlightFilterIfMissing(console);
+                new Rehighlighter().resetHighlights(console);
+            }
+            else if (operation == Operation.DELETE) {
+                for (int i=0; i<5; i++){
+                    createHighlightFilterIfMissing(console);
+                }
+                new Rehighlighter().resetHighlights(console);
+            }
+            operation = Operation.NONE;
         }
 
     }
@@ -143,5 +155,9 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
                 i.remove();
             }
         }
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
     }
 }

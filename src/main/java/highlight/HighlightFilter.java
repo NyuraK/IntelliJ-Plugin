@@ -17,35 +17,17 @@ import java.util.List;
 
 public class HighlightFilter implements Filter {
 
-    private Project project;
-    private MyConfigurable configuration;
     private List<ExpressionProcessor> expressionProcessors;
     private ConsoleViewContentType lastTextAttributes = null;
-    private boolean onDelete;
 
-    public HighlightFilter(@NotNull Project project, MyConfigurable configuration) {
-        this.project = project;
-        this.configuration = configuration;
+    public HighlightFilter(@NotNull Project project) {
         expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : configuration.getExpressionItems()) {
+        for (ExpressionItem item : MyConfigurable.getInstance().getExpressionItems()) {
             if (!contains(item)) {
                 expressionProcessors.add(new ExpressionProcessor(item));
                 System.out.println("Adding to processor " + item.toString());
             }
         }
-    }
-
-    public HighlightFilter(@NotNull Project project, MyConfigurable configuration, boolean onDelete) {
-        this.project = project;
-        this.configuration = configuration;
-        expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : configuration.getExpressionItems()) {
-            if (!contains(item)) {
-                expressionProcessors.add(new ExpressionProcessor(item));
-                System.out.println("Adding to processor " + item.toString());
-            }
-        }
-        this.onDelete = onDelete;
     }
 
     private boolean contains(ExpressionItem onDelete) {
@@ -78,10 +60,10 @@ public class HighlightFilter implements Filter {
 
     private FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
-            String substring = configuration.limitInputLength_andCutNewLine(text);
-            CharSequence charSequence = configuration.limitProcessingTime(substring);
+            String substring = MyConfigurable.getInstance().limitInputLength_andCutNewLine(text);
+            CharSequence charSequence = MyConfigurable.getInstance().limitProcessingTime(substring);
 
-            FilterState state = new FilterState(offset, configuration, charSequence);
+            FilterState state = new FilterState(offset, charSequence);
             for (ExpressionProcessor processor : expressionProcessors) {
                     state = processor.process(state);
             }
