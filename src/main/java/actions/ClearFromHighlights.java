@@ -20,6 +20,6 @@ public class ClearFromHighlights extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         new Rehighlighter().removeAllHighlighters(consoleView);
-//        MyConfigurable.getInstance().setConsole(consoleView);
+//        MyConfiguration.getInstance().setConsole(consoleView);
     }
 }

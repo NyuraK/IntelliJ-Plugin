@@ -5,7 +5,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.JBCheckBox;
-import plugin.MyConfigurable;
+import plugin.MyConfiguration;
 import stuff.ExpressionItem;
 import stuff.Operation;
 
@@ -46,7 +46,7 @@ public class UIExprItem extends JPanel {
         item = new ExpressionItem();
         item.setStyle(Color.BLACK, color)
                 .setExpression(text).setCaseSensitive(caseMode);
-        MyConfigurable.getInstance().setExpressionItems(item);
+        MyConfiguration.getInstance().setExpressionItems(item);
 
         addListeners();
     }
@@ -57,7 +57,7 @@ public class UIExprItem extends JPanel {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel panel = MyConfigurable.getInstance().form.getPanel();
+                JPanel panel = MyConfiguration.getInstance().getForm().getPanel();
                 Component[] componentList = panel.getComponents();
                 for(Component c : componentList){
                     if(c instanceof UIExprItem){
@@ -66,12 +66,12 @@ public class UIExprItem extends JPanel {
                         }
                     }
                 }
-                MyConfigurable.getInstance().form.getRootComponent().revalidate();
-                MyConfigurable.getInstance().form.getRootComponent().repaint();
-                MyConfigurable.getInstance().deleteItem(item);
-                MyConfigurable.getInstance().setExpressionItems(new ExpressionItem()
+                MyConfiguration.getInstance().getForm().getRootComponent().revalidate();
+                MyConfiguration.getInstance().getForm().getRootComponent().repaint();
+                MyConfiguration.getInstance().deleteItem(item);
+                MyConfiguration.getInstance().setExpressionItems(new ExpressionItem()
                         .setStyle(Color.BLACK, Color.white).setExpression(item.getExpression()));
-                MyConfigurable.getInstance().setOperation(Operation.DELETE);
+                MyConfiguration.getInstance().setOperation(Operation.DELETE);
             }
         });
     }

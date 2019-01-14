@@ -1,7 +1,6 @@
-package plugin;
+package highlight;
 
 import com.intellij.execution.filters.Filter;
-import highlight.FilterState;
 import org.apache.commons.lang.StringUtils;
 import stuff.ExpressionItem;
 

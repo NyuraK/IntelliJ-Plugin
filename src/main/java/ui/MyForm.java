@@ -2,7 +2,7 @@ package ui;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.ColorPicker;
-import plugin.MyConfigurable;
+import plugin.MyConfiguration;
 import stuff.ExpressionItem;
 import stuff.Operation;
 
@@ -38,8 +38,8 @@ public class MyForm {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         JComponent[] allComponents = { textField1, colorButton, addButton, panel};
         add(allComponents);
-        if (!MyConfigurable.getInstance().getExpressionItems().isEmpty()) {
-            for (ExpressionItem item: MyConfigurable.getInstance().getExpressionItems()) {
+        if (!MyConfiguration.getInstance().getExpressionItems().isEmpty()) {
+            for (ExpressionItem item: MyConfiguration.getInstance().getExpressionItems()) {
                 panel.add(new UIExprItem(item.getExpression(), item.getColor(), false));
             }
             root.revalidate();
@@ -54,7 +54,7 @@ public class MyForm {
                     root.revalidate();
                 }
                 textField1.setText("");
-                MyConfigurable.getInstance().setOperation(Operation.ADD);
+                MyConfiguration.getInstance().setOperation(Operation.ADD);
                 changed = true;
             }
         });
@@ -62,7 +62,7 @@ public class MyForm {
         colorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                color = ColorPicker.showDialog(panel, "Background color", Color.BLUE, true, null, true);
+                color = ColorPicker.showDialog(panel, "Background color", Color.white, true, null, true);
             }
         });
     }
@@ -71,6 +71,13 @@ public class MyForm {
         for (JComponent component : allComponents) {
 //            component.setAlignmentX(Component.CENTER_ALIGNMENT);
             root.add(component);
+        }
+    }
+
+    public void addUIItem(String expression, Color color) {
+        if (!expression.isEmpty()) {
+            panel.add(new UIExprItem(expression, color, true));
+            root.revalidate();
         }
     }
 

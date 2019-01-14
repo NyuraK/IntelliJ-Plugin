@@ -1,6 +1,6 @@
 package ui;
 
-import plugin.MyConfigurable;
+import plugin.MyConfiguration;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,7 @@ public class ExpressionWindow extends JFrame {
     private JTextField textField1;
     private JPanel panel;
 
-    public ExpressionWindow(MyConfigurable configurable) {
+    public ExpressionWindow(MyConfiguration configurable) {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

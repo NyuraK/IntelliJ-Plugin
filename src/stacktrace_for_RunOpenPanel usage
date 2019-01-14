@@ -2,7 +2,7 @@ Argument for @NotNull parameter 'project' of com/intellij/execution/impl/Console
 java.lang.IllegalArgumentException: Argument for @NotNull parameter 'project' of com/intellij/execution/impl/ConsoleViewImpl.<init> must not be null
 	at com.intellij.execution.impl.ConsoleViewImpl.$$$reportNull$$$0(ConsoleViewImpl.java)
 	at com.intellij.execution.impl.ConsoleViewImpl.<init>(ConsoleViewImpl.java)
-	at plugin.MyConfigurable.apply(MyConfigurable.java:99)
+	at plugin.MyConfiguration.apply(MyConfigurable.java:99)
 	at com.intellij.openapi.options.newEditor.ConfigurableEditor.apply(ConfigurableEditor.java:323)
 	at com.intellij.openapi.options.newEditor.ConfigurableEditor.apply(ConfigurableEditor.java:144)
 	at com.intellij.openapi.options.newEditor.ConfigurableEditor$2.actionPerformed(ConfigurableEditor.java:81)

@@ -8,11 +8,11 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!--<toolWindow id="Grep Viewer" icon="/network.png" anchor="bottom" factoryClass="actions.ExpressionToolWindow"></toolWindow>-->
-        <consoleFilterProvider order="first" implementation="extension.ExpressionFilterProvider"/>
-        <consoleActionsPostProcessor implementation="extension.ExpressionActionPostProcessor"/>
-        <projectConfigurable id="MyConsole" instance="plugin.MyConfigurable" groupId="build"/>
-        <projectService serviceInterface="plugin.MyConfigurable" serviceImplementation="plugin.MyConfigurable"/>
-        <applicationConfigurable instance="plugin.MyConfigurable" groupId="build"></applicationConfigurable>
+        <consoleFilterProvider order="first" implementation="plugin.ExpressionFilterProvider"/>
+        <consoleActionsPostProcessor implementation="plugin.ExpressionActionPostProcessor"/>
+        <projectConfigurable id="MyConsole" instance="plugin.MyConfiguration" groupId="build"/>
+        <projectService serviceInterface="plugin.MyConfiguration" serviceImplementation="plugin.MyConfiguration"/>
+        <applicationConfigurable instance="plugin.MyConfiguration" groupId="build"></applicationConfigurable>
     </extensions>
 
     <actions>
@@ -32,7 +32,7 @@
 
     <application-components>
         <component>
-            <implementation-class>plugin.MyConfigurable</implementation-class>
+            <implementation-class>plugin.MyConfiguration</implementation-class>
         </component>
     </application-components>
 

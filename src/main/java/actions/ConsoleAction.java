@@ -6,8 +6,7 @@ import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import plugin.MyConfigurable;
-import stuff.Utils;
+import plugin.MyConfiguration;
 
 import javax.swing.*;
 
@@ -26,18 +25,9 @@ public class ConsoleAction extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-//        MyConfigurable.getInstance().prepareForm();
-        MyConfigurable.getInstance().setConsole(consoleView);
-        ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfigurable.getInstance(), true);
+//        MyConfiguration.getInstance().prepareForm();
+        MyConfiguration.getInstance().setConsole(consoleView);
+        ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfiguration.getInstance(), true);
     }
 
-    private String getExpression(AnActionEvent e) {
-        String s = Utils.getSelectedString(e);
-        if (s == null)
-            s = "";
-        if (s.endsWith("\n")) {
-            s = s.substring(0, s.length() - 1);
-        }
-        return s;
-    }
 }

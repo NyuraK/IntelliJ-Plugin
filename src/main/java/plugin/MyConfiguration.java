@@ -23,6 +23,7 @@ import stuff.Operation;
 import ui.MyForm;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,13 +33,14 @@ import java.util.List;
         storages = {
                 @Storage("/HighlightingConsole.xml")}
 )
-public class MyConfigurable implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfigurable> {
+public class MyConfiguration implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfiguration> {
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
     public static final int maxLengthToMatch = 120;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
 
     @Transient
-    public MyForm form;
+    private MyForm form;
+
     @Transient
     private Project project;
     @Transient
@@ -46,12 +48,12 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
     @Transient
     private Operation operation = Operation.NONE;
 
-    public MyConfigurable() {
+    public MyConfiguration() {
 
     }
 
-    public static MyConfigurable getInstance() {
-        return ApplicationManager.getApplication().getComponent(MyConfigurable.class);
+    public static MyConfiguration getInstance() {
+        return ApplicationManager.getApplication().getComponent(MyConfiguration.class);
     }
 
     public HighlightFilter createHighlightFilter(Project project) {
@@ -65,7 +67,10 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
         return expressionItems;
     }
 
-    //TODO maybe here might be another better logic (i.e. in his 'Profile' he resets list)
+    public MyForm getForm() {
+        return form;
+    }
+
     public void setExpressionItems(ExpressionItem item) {
         if (!expressionItems.contains(item)) {
             this.expressionItems.add(item);
@@ -140,12 +145,12 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     @Nullable
     @Override
-    public MyConfigurable getState() {
+    public MyConfiguration getState() {
         return this;
     }
 
     @Override
-    public void loadState(@NotNull MyConfigurable state) {
+    public void loadState(@NotNull MyConfiguration state) {
         XmlSerializerUtil.copyBean(state, this);
     }
 
@@ -160,5 +165,10 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
 
     public void setOperation(Operation operation) {
         this.operation = operation;
+    }
+
+    public void addToPanel(String expression, Color color) {
+        if (form == null) return;
+        form.addUIItem(expression, color);
     }
 }

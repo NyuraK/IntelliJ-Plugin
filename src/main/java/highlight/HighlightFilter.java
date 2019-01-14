@@ -6,8 +6,7 @@ import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import plugin.ExpressionProcessor;
-import plugin.MyConfigurable;
+import plugin.MyConfiguration;
 import stuff.ExpressionItem;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class HighlightFilter implements Filter {
 
     public HighlightFilter(@NotNull Project project) {
         expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : MyConfigurable.getInstance().getExpressionItems()) {
+        for (ExpressionItem item : MyConfiguration.getInstance().getExpressionItems()) {
             if (!contains(item)) {
                 expressionProcessors.add(new ExpressionProcessor(item));
             }
@@ -59,8 +58,8 @@ public class HighlightFilter implements Filter {
 
     private FilterState filter(@Nullable String text, int offset) {
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
-            String substring = MyConfigurable.getInstance().limitInputLength_andCutNewLine(text);
-            CharSequence charSequence = MyConfigurable.getInstance().limitProcessingTime(substring);
+            String substring = MyConfiguration.getInstance().limitInputLength_andCutNewLine(text);
+            CharSequence charSequence = MyConfiguration.getInstance().limitProcessingTime(substring);
 
             FilterState state = new FilterState(offset, charSequence);
             for (ExpressionProcessor processor : expressionProcessors) {
@@ -103,5 +102,8 @@ public class HighlightFilter implements Filter {
     }
     private ResultItem getResultItem(int entireLength, FilterState state, ConsoleViewContentType textAttributes) {
         return new ResultItem(state.getOffset(), entireLength, null, textAttributes.getAttributes());
+    }
+
+    public void onChange() {
     }
 }

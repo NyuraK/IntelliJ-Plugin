@@ -1,5 +1,6 @@
-package extension;
+package plugin;
 
+import actions.AddHighlightAction;
 import actions.ClearFromHighlights;
 import actions.ConsoleAction;
 import com.intellij.execution.actions.ConsoleActionsPostProcessor;
@@ -23,4 +24,12 @@ public class ExpressionActionPostProcessor extends ConsoleActionsPostProcessor {
         return anActions.toArray(new AnAction[anActions.size()]);
     }
 
+    @NotNull
+    @Override
+    public AnAction[] postProcessPopupActions(@NotNull ConsoleView console, @NotNull AnAction[] actions) {
+        ArrayList<AnAction> anActions = new ArrayList<>();
+        anActions.add(new AddHighlightAction());
+        anActions.addAll(Arrays.asList(super.postProcessPopupActions(console, actions)));
+        return anActions.toArray(new AnAction[anActions.size()]);
+    }
 }
