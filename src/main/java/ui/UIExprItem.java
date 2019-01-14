@@ -68,9 +68,9 @@ public class UIExprItem extends JPanel {
                 }
                 MyConfigurable.getInstance().form.getRootComponent().revalidate();
                 MyConfigurable.getInstance().form.getRootComponent().repaint();
+                MyConfigurable.getInstance().deleteItem(item);
                 MyConfigurable.getInstance().setExpressionItems(new ExpressionItem()
                         .setStyle(Color.BLACK, Color.white).setExpression(item.getExpression()));
-                MyConfigurable.getInstance().deleteItem(item);
                 MyConfigurable.getInstance().setOperation(Operation.DELETE);
             }
         });

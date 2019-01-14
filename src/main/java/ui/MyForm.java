@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 public class MyForm {
     private static final Icon ICON = IconLoader.getIcon("/color-palette.png");
 
-
     private JPanel root = new JPanel();
     private JButton addButton = new JButton("Add");
     public JTextField textField1 = new JTextField();

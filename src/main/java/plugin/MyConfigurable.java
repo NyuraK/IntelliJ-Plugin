@@ -104,6 +104,7 @@ public class MyConfigurable implements ApplicationComponent, Configurable, Persi
                     createHighlightFilterIfMissing(console);
                 }
                 new Rehighlighter().resetHighlights(console);
+
             }
             operation = Operation.NONE;
         }

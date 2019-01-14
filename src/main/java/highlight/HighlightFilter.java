@@ -25,7 +25,6 @@ public class HighlightFilter implements Filter {
         for (ExpressionItem item : MyConfigurable.getInstance().getExpressionItems()) {
             if (!contains(item)) {
                 expressionProcessors.add(new ExpressionProcessor(item));
-                System.out.println("Adding to processor " + item.toString());
             }
         }
     }
