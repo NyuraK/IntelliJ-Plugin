@@ -15,7 +15,6 @@ public class ExpressionItem {
     private String id;
     private String expression;
     private transient Pattern pattern;
-    //there it works only after re-running
     private ItemStyle style = new ItemStyle();
 
     public ExpressionItem() {
@@ -119,5 +118,10 @@ public class ExpressionItem {
     public boolean equals(Object obj) {
         ExpressionItem item = (ExpressionItem) obj;
         return this.id.equals(item.id);
+//        if (this.id.equals(item.id))
+//            return true;
+//        else if (this.expression.equals(item.expression) )
+//            return true;
+//        return false;
     }
 }

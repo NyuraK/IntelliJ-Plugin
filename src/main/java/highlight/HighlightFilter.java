@@ -18,16 +18,15 @@ import java.util.List;
 public class HighlightFilter implements Filter {
 
     private Project project;
-    private MyConfigurable configuration;
     private List<ExpressionProcessor> expressionProcessors;
     private ConsoleViewContentType lastTextAttributes = null;
     private boolean onDelete;
 
-    public HighlightFilter(@NotNull Project project, MyConfigurable configuration) {
+
+    public HighlightFilter(@NotNull Project project) {
         this.project = project;
-        this.configuration = configuration;
         expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : configuration.getExpressionItems()) {
+        for (ExpressionItem item : MyConfigurable.getInstance().getExpressionItems()) {
             if (!contains(item)) {
                 expressionProcessors.add(new ExpressionProcessor(item));
                 System.out.println("Adding to processor " + item.toString());
@@ -35,18 +34,17 @@ public class HighlightFilter implements Filter {
         }
     }
 
-    public HighlightFilter(@NotNull Project project, MyConfigurable configuration, boolean onDelete) {
-        this.project = project;
-        this.configuration = configuration;
-        expressionProcessors = new ArrayList<>();
-        for (ExpressionItem item : configuration.getExpressionItems()) {
-            if (!contains(item)) {
-                expressionProcessors.add(new ExpressionProcessor(item));
-                System.out.println("Adding to processor " + item.toString());
-            }
-        }
-        this.onDelete = onDelete;
-    }
+//    public HighlightFilter(@NotNull Project project, boolean onDelete) {
+//        this.project = project;
+//        expressionProcessors = new ArrayList<>();
+//        for (ExpressionItem item : MyConfigurable.getInstance().getExpressionItems()) {
+//            if (!contains(item)) {
+//                expressionProcessors.add(new ExpressionProcessor(item));
+//                System.out.println("Adding to processor " + item.toString());
+//            }
+//        }
+//        this.onDelete = onDelete;
+//    }
 
     private boolean contains(ExpressionItem onDelete) {
         for (Iterator<ExpressionProcessor> i = expressionProcessors.iterator(); i.hasNext(); ) {
@@ -58,7 +56,7 @@ public class HighlightFilter implements Filter {
         return false;
     }
 
-    public int getExpressionItem() {
+    public int getExpressionProcessorSize() {
         return expressionProcessors.size();
     }
 
@@ -77,11 +75,13 @@ public class HighlightFilter implements Filter {
     }
 
     private FilterState filter(@Nullable String text, int offset) {
+//        System.out.println("Processors size" + getExpressionProcessorSize());
+//        expressionProcessors.forEach((e-> System.out.println(e.getExpressionItem())));
         if (!StringUtils.isEmpty(text) && !expressionProcessors.isEmpty()) {
-            String substring = configuration.limitInputLength_andCutNewLine(text);
-            CharSequence charSequence = configuration.limitProcessingTime(substring);
+            String substring = MyConfigurable.getInstance().limitInputLength_andCutNewLine(text);
+            CharSequence charSequence = MyConfigurable.getInstance().limitProcessingTime(substring);
 
-            FilterState state = new FilterState(offset, configuration, charSequence);
+            FilterState state = new FilterState(offset, charSequence);
             for (ExpressionProcessor processor : expressionProcessors) {
                     state = processor.process(state);
             }

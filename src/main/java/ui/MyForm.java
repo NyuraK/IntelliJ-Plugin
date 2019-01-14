@@ -3,6 +3,7 @@ package ui;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.ColorPicker;
 import plugin.MyConfigurable;
+import plugin.Operation;
 import stuff.ExpressionItem;
 
 import javax.swing.*;
@@ -21,10 +22,7 @@ public class MyForm {
     private JPanel panel = new JPanel();
     private boolean changed = false;
     private Color color;
-
-
-    private MyConfigurable configuration;
-
+    
     public JComponent getRootComponent() {
         return root;
     }
@@ -33,8 +31,7 @@ public class MyForm {
         return panel;
     }
 
-    public MyForm(MyConfigurable configurable) {
-        this.configuration = configurable;
+    public MyForm() {
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         colorButton.setSize(32, 32);
@@ -42,9 +39,9 @@ public class MyForm {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         JComponent[] allComponents = { textField1, colorButton, addButton, panel};
         add(allComponents);
-        if (!configuration.getExpressionItems().isEmpty()) {
-            for (ExpressionItem item: configuration.getExpressionItems()) {
-                panel.add(new UIExprItem(item.getExpression(), item.getColor(), configuration));
+        if (!MyConfigurable.getInstance().getExpressionItems().isEmpty()) {
+            for (ExpressionItem item: MyConfigurable.getInstance().getExpressionItems()) {
+                panel.add(new UIExprItem(item.getExpression(), item.getColor()));
             }
             root.revalidate();
         }
@@ -54,11 +51,12 @@ public class MyForm {
                 String expression = textField1.getText();
                 //TODO проверять на наличие в
                 if (!expression.isEmpty()) {
-                    panel.add(new UIExprItem(expression, color, configuration));
+                    panel.add(new UIExprItem(expression, color));
                     root.revalidate();
                 }
                 textField1.setText("");
                 changed = true;
+                MyConfigurable.getInstance().setOperation(Operation.ADD);
             }
         });
 

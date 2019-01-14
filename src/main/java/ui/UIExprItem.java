@@ -6,6 +6,7 @@ import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.JBCheckBox;
 import plugin.MyConfigurable;
+import plugin.Operation;
 import stuff.ExpressionItem;
 
 import javax.swing.*;
@@ -17,7 +18,6 @@ public class UIExprItem extends JPanel {
     private static UIExprItem ourInstance = new UIExprItem();
 
     private static final Icon ICON = IconLoader.getIcon("/rubbish-bin.png");
-    private MyConfigurable configuration;
     private JLabel expression;
     private JButton picker = new JButton();
     private JButton deleteBtn = new JButton();
@@ -30,8 +30,7 @@ public class UIExprItem extends JPanel {
         return ourInstance;
     }
 
-    public UIExprItem(String text, Color color, MyConfigurable configuration) {
-        this.configuration = configuration;
+    public UIExprItem(String text, Color color) {
         expression = new JLabel(text);
         picker.setBackground(color);
         picker.setForeground(color);
@@ -47,7 +46,8 @@ public class UIExprItem extends JPanel {
         item = new ExpressionItem();
         item.setStyle(Color.BLACK, color);
         item.setExpression(text);
-        configuration.setExpressionItems(item);
+
+        MyConfigurable.getInstance().setExpressionItems(item);
 
         addListeners();
     }
@@ -58,7 +58,7 @@ public class UIExprItem extends JPanel {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel panel = configuration.form.getPanel();
+                JPanel panel = MyConfigurable.getInstance().form.getPanel();
                 Component[] componentList = panel.getComponents();
                 for(Component c : componentList){
                     if(c instanceof UIExprItem){
@@ -67,11 +67,12 @@ public class UIExprItem extends JPanel {
                         }
                     }
                 }
-                configuration.form.getRootComponent().revalidate();
-                configuration.form.getRootComponent().repaint();
-                configuration.setExpressionItems(new ExpressionItem()
+                MyConfigurable.getInstance().form.getRootComponent().revalidate();
+                MyConfigurable.getInstance().form.getRootComponent().repaint();
+                MyConfigurable.getInstance().setExpressionItems(new ExpressionItem()
                         .setStyle(Color.BLACK, Color.white).setExpression(item.getExpression()));
-                configuration.deleteItem(item);
+                MyConfigurable.getInstance().deleteItem(item);
+                MyConfigurable.getInstance().setOperation(Operation.DELETE);
             }
         });
     }
