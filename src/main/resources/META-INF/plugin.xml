@@ -12,6 +12,7 @@
         <consoleActionsPostProcessor implementation="extension.ExpressionActionPostProcessor"/>
         <projectConfigurable id="MyConsole" instance="plugin.MyConfigurable" groupId="build"/>
         <projectService serviceInterface="plugin.MyConfigurable" serviceImplementation="plugin.MyConfigurable"/>
+        <applicationConfigurable instance="plugin.MyConfigurable" groupId="build"></applicationConfigurable>
     </extensions>
 
     <actions>
