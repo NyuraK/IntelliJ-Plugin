@@ -16,8 +16,9 @@ public class ExpressionItem {
     private String expression;
     private transient Pattern pattern;
     private boolean isCaseSensitive;
-    //there it works only after re-running
     private ItemStyle style = new ItemStyle();
+    //TODO figure out how to set operation
+    private Operation operation = Operation.NONE;
 
     public ExpressionItem() {
         this.id = String.valueOf(atomicInteger.incrementAndGet());
@@ -48,6 +49,15 @@ public class ExpressionItem {
             this.expression = expression;
             this.pattern = Pattern.compile(expression, computeFlags());
         }
+        return this;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public ExpressionItem setOperation(Operation operation) {
+        this.operation = operation;
         return this;
     }
 

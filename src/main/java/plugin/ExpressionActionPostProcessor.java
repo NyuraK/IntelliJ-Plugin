@@ -17,6 +17,7 @@ public class ExpressionActionPostProcessor extends ConsoleActionsPostProcessor {
     @Override
     public AnAction[] postProcess(@NotNull ConsoleView console, @NotNull AnAction[] actions) {
         ArrayList<AnAction> anActions = new ArrayList<>();
+        MyConfiguration.getInstance().createHighlightFilterIfMissing(console);
         anActions.add(new ConsoleAction(console));
         anActions.add(new ClearFromHighlights(console));
         anActions.addAll(Arrays.asList(actions));
@@ -32,4 +33,5 @@ public class ExpressionActionPostProcessor extends ConsoleActionsPostProcessor {
         anActions.addAll(Arrays.asList(super.postProcessPopupActions(console, actions)));
         return anActions.toArray(new AnAction[anActions.size()]);
     }
+
 }

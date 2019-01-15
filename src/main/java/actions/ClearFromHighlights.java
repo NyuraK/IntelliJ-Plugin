@@ -4,7 +4,9 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.util.IconLoader;
-import highlight.Rehighlighter;
+import filters.Rehighlighter;
+import plugin.MyConfiguration;
+import stuff.Operation;
 
 import javax.swing.*;
 
@@ -20,6 +22,6 @@ public class ClearFromHighlights extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         new Rehighlighter().removeAllHighlighters(consoleView);
-//        MyConfiguration.getInstance().setConsole(consoleView);
+        MyConfiguration.getInstance().setOperation(Operation.ADD);
     }
 }

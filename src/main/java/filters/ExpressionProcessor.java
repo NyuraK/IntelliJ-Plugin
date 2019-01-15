@@ -1,4 +1,4 @@
-package highlight;
+package filters;
 
 import com.intellij.execution.filters.Filter;
 import org.apache.commons.lang.StringUtils;
@@ -7,7 +7,6 @@ import stuff.ExpressionItem;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO посмотреть реализацию у чувака
 public class ExpressionProcessor {
     private ExpressionItem expressionItem;
 
@@ -28,7 +27,7 @@ public class ExpressionProcessor {
                 while (matcher.find()) {
                     final int start = matcher.start();
                     final int end = matcher.end();
-                    state.setMatchesSomething(true);
+                    state.executeAction(expressionItem);
                     Filter.Result resultItem = new Filter.Result
                             (state.getOffset() + start, state.getOffset() + end,
                             null, expressionItem.getConsoleViewContentType(null).getAttributes());

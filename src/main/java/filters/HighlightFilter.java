@@ -1,13 +1,12 @@
-package highlight;
+package filters;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugin.MyConfiguration;
 import stuff.ExpressionItem;
+import stuff.Operation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,10 +18,10 @@ public class HighlightFilter implements Filter {
     private List<ExpressionProcessor> expressionProcessors;
     private ConsoleViewContentType lastTextAttributes = null;
 
-    public HighlightFilter(@NotNull Project project) {
+    public HighlightFilter() {
         expressionProcessors = new ArrayList<>();
         for (ExpressionItem item : MyConfiguration.getInstance().getExpressionItems()) {
-            if (!contains(item)) {
+            if (!contains(item) && item.getOperation() == Operation.ADD) {
                 expressionProcessors.add(new ExpressionProcessor(item));
             }
         }
@@ -104,6 +103,4 @@ public class HighlightFilter implements Filter {
         return new ResultItem(state.getOffset(), entireLength, null, textAttributes.getAttributes());
     }
 
-    public void onChange() {
-    }
 }

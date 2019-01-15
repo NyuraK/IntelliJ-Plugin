@@ -1,5 +1,6 @@
 package plugin;
 
+import com.intellij.execution.filters.InputFilter;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.application.ApplicationManager;
@@ -13,8 +14,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
-import highlight.HighlightFilter;
-import highlight.Rehighlighter;
+import filters.ExpressionInputFilter;
+import filters.HighlightFilter;
+import filters.Rehighlighter;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +37,7 @@ import java.util.List;
 )
 public class MyConfiguration implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfiguration> {
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
-    public static final int maxLengthToMatch = 120;
+    public static final int maxLengthToMatch = 200;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
 
     @Transient
@@ -58,10 +60,13 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     public HighlightFilter createHighlightFilter(Project project) {
         this.project = project;
-        HighlightFilter highlightFilter = new HighlightFilter(project);
+        HighlightFilter highlightFilter = new HighlightFilter();
         return highlightFilter;
     }
 
+    public InputFilter createInputFilter() {
+        return new ExpressionInputFilter(console);
+    }
 
     public List<ExpressionItem> getExpressionItems() {
         return expressionItems;
@@ -105,6 +110,7 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
                 new Rehighlighter().resetHighlights(console);
             }
             else if (operation == Operation.DELETE) {
+                //TODO I still can't figure out why and how...
                 for (int i=0; i<5; i++){
                     createHighlightFilterIfMissing(console);
                 }
@@ -167,8 +173,10 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         this.operation = operation;
     }
 
-    public void addToPanel(String expression, Color color) {
+    public void addToPanel(String expression, Color color, Operation operation) {
         if (form == null) return;
-        form.addUIItem(expression, color);
+        form.addUIItem(expression, color, operation);
     }
+
+
 }

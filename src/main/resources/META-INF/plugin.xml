@@ -9,6 +9,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!--<toolWindow id="Grep Viewer" icon="/network.png" anchor="bottom" factoryClass="actions.ExpressionToolWindow"></toolWindow>-->
         <consoleFilterProvider order="first" implementation="plugin.ExpressionFilterProvider"/>
+        <consoleInputFilterProvider implementation="plugin.ExpressionInputFilterProvider"/>
         <consoleActionsPostProcessor implementation="plugin.ExpressionActionPostProcessor"/>
         <projectConfigurable id="MyConsole" instance="plugin.MyConfiguration" groupId="build"/>
         <projectService serviceInterface="plugin.MyConfiguration" serviceImplementation="plugin.MyConfiguration"/>
@@ -16,18 +17,10 @@
     </extensions>
 
     <actions>
-        <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
-            <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="Myplugin.Textboxes" class="HelloAction" text="Hello" description="Says hello"/>
-        </group>
         <group id="MyPlugin.Action" description="Open Panel">
             <add-to-group group-id="RunMenu" anchor="first"/>
             <action class="actions.ToolAction" text="Open panel"></action>
         </group>
-        <!--<group id="MyPlugin.ConsoleAction" text="Please" description="work">-->
-            <!--<add-to-group group-id="MainMenu" anchor="last"/>-->
-            <!--<action id="Myplugin.Textboxes" class="actions.ConsoleAction" text="Hello" description="Says hello"/>-->
-        <!--</group>-->
     </actions>
 
     <application-components>

@@ -1,4 +1,4 @@
-package highlight;
+package filters;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
@@ -21,7 +21,6 @@ public class Rehighlighter {
         if (editor != null) {
             editor.getMarkupModel().removeAllHighlighters();
         }
-//        ((ConsoleViewImpl) console).revalidate();
     }
 
     private void reset(ConsoleViewImpl consoleViewImpl) {

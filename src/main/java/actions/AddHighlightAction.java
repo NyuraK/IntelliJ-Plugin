@@ -10,8 +10,9 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.ColorPicker;
-import highlight.Rehighlighter;
+import filters.Rehighlighter;
 import plugin.MyConfiguration;
+import stuff.Operation;
 import stuff.Utils;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class AddHighlightAction extends DumbAwareAction {
     public static final Icon ICON = IconLoader.getIcon("/paint-brush.png");
 
     public AddHighlightAction() {
-        super("Add highlight", null, ICON);
+        super("Highlight", null, ICON);
 
     }
 
@@ -49,7 +50,7 @@ public class AddHighlightAction extends DumbAwareAction {
     }
 
     private void addToConsole(ConsoleView console, String expression, Color color) {
-        MyConfiguration.getInstance().addToPanel(expression, color);
+        MyConfiguration.getInstance().addToPanel(expression, color, Operation.ADD);
         MyConfiguration.getInstance().createHighlightFilterIfMissing(console);
         new Rehighlighter().resetHighlights(console);
     }
