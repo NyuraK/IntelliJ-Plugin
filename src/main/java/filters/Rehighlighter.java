@@ -24,11 +24,8 @@ public class Rehighlighter {
     }
 
     private void reset(ConsoleViewImpl consoleViewImpl) {
-        Editor editor = consoleViewImpl.getEditor();
-        if (editor != null) {
-            editor.getMarkupModel().removeAllHighlighters();
+            removeAllHighlighters(consoleViewImpl);
             consoleViewImpl.rehighlightHyperlinksAndFoldings();
             consoleViewImpl.revalidate();
-        }
     }
 }
