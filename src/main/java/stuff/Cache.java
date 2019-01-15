@@ -16,18 +16,6 @@ public class Cache {
         return instance;
     }
 
-    public static void reset() {
-        getInstance().setMap(new HashMap<>());
-    }
-
-    public Map<String, ConsoleViewContentType> getMap() {
-        return map;
-    }
-
-    public void setMap(Map<String, ConsoleViewContentType> map) {
-        this.map = map;
-    }
-
     public ConsoleViewContentType get(String id) {
         return map.get(id);
     }

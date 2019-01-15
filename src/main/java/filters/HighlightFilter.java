@@ -37,10 +37,6 @@ public class HighlightFilter implements Filter {
         return false;
     }
 
-    public int getExpressionItem() {
-        return expressionProcessors.size();
-    }
-
     @Nullable
     @Override
     public Result applyFilter(String line, int entireLength) {

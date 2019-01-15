@@ -57,8 +57,8 @@ public class MyForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String expression = textField1.getText();
                 //TODO проверять на наличие в
-                if (!expression.isEmpty()) {
-                    panel.add(new UIExprItem(expression, color, caseButton.isSelected(), Operation.ADD));
+                if (!expression.isEmpty() && !containsItem(expression)) {
+                    panelForEl.add(new UIExprItem(expression, color, caseButton.isSelected(), Operation.ADD));
                     caseButton.setSelected(false);
                     root.revalidate();
                 }
@@ -91,6 +91,18 @@ public class MyForm extends JFrame {
             }
         });
 
+    }
+
+    private boolean containsItem(String expression) {
+        Component[] componentList = panelForEl.getComponents();
+        for (Component c : componentList) {
+            if (c instanceof UIExprItem) {
+                if (((UIExprItem) c).getExpression().equals(expression)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void placeElements() {
@@ -145,7 +157,7 @@ public class MyForm extends JFrame {
     }
 
     public void addUIItem(String expression, Color color, Operation operation) {
-        if (!expression.isEmpty()) {
+        if (!expression.isEmpty() && !containsItem(expression)) {
             if (operation == Operation.ADD)
                 panelForEl.add(new UIExprItem(expression, color, true, operation));
             else panelForEl2.add(new UIExprItem(expression, color, true, operation));

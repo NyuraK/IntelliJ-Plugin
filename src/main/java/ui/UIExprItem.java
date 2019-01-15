@@ -74,4 +74,7 @@ public class UIExprItem extends JPanel {
         });
     }
 
+    public String getExpression() {
+        return expression.getText();
+    }
 }

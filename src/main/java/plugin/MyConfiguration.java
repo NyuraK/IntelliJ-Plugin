@@ -29,6 +29,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @State(
         name="Highlighting console",
@@ -39,6 +41,7 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
     public static final int maxLengthToMatch = 200;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
+    private boolean onUpdate = false;
 
     @Transient
     private MyForm form;
@@ -77,9 +80,29 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     }
 
     public void setExpressionItems(ExpressionItem item) {
-        if (!expressionItems.contains(item)) {
-            this.expressionItems.add(item);
+        checkIfExists(item);
+        this.expressionItems.add(item);
+        if (onUpdate) update();
+    }
+
+    private void checkIfExists(ExpressionItem item) {
+        String input = item.getExpression();
+        ExpressionItem onDelete = item;
+        for (ExpressionItem i: expressionItems) {
+            final Pattern pattern = i.getPattern();
+            final Matcher matcher = pattern.matcher(input);
+            if (matcher.find() && i.getColor().equals(Color.white)) {
+                System.out.println("A-ha! Matches");
+                onDelete = i;
+                break;
+            }
         }
+        if (item == onDelete){
+            System.out.println("But references wrong...");
+            return;
+        }
+        onUpdate = true;
+        deleteItem(onDelete);
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -167,6 +190,13 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
                 i.remove();
             }
         }
+    }
+
+    private void update() {
+        for (int i=0; i<5; i++)
+            createHighlightFilterIfMissing(console);
+        new Rehighlighter().resetHighlights(console);
+        onUpdate = false;
     }
 
     public void setOperation(Operation operation) {
