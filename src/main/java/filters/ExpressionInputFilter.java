@@ -56,9 +56,8 @@ public class ExpressionInputFilter implements InputFilter {
             if (state.isExclude()) {
                 result = REMOVE_OUTPUT;
                 lastLineFiltered = true;
-//            } else if (profile.isMultilineInputFilter() && !state.isMatchesSomething() && lastLineFiltered) {
-//                result = REMOVE_OUTPUT;
-//            }
+            } else if (!state.isMatchesSomething() && lastLineFiltered) {
+                result = REMOVE_OUTPUT;
             }
         }
         if (result == null) {

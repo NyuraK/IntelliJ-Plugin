@@ -98,7 +98,6 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
             }
         }
         if (item == onDelete){
-            System.out.println("But references wrong...");
             return;
         }
         onUpdate = true;
@@ -141,8 +140,13 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
             }
             operation = Operation.NONE;
+
         }
 
+    }
+
+    public ConsoleView getConsole() {
+        return console;
     }
 
     @NotNull
@@ -162,7 +166,11 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
 
     public void setConsole(ConsoleView consoleView) {
+        if (this.console != consoleView) {
+            System.out.println("A-ha, different consoles");
+        }
         this.console = consoleView;
+
     }
 
     public void createHighlightFilterIfMissing(@NotNull ConsoleView console) {
@@ -193,8 +201,9 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     }
 
     private void update() {
-        for (int i=0; i<5; i++)
-            createHighlightFilterIfMissing(console);
+        for (ExpressionItem item: expressionItems)
+            System.out.println(item);
+        createHighlightFilterIfMissing(console);
         new Rehighlighter().resetHighlights(console);
         onUpdate = false;
     }
