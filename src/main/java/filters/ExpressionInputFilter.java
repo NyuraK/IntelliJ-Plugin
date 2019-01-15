@@ -43,7 +43,7 @@ public class ExpressionInputFilter implements InputFilter {
         }
 
         FilterState state = filter(text, -1);
-        clearConsole(state);
+//        clearConsole(state);
         List<Pair<String, ConsoleViewContentType>> pairs = prepareResult(state, contentType);
 
         return pairs;
@@ -56,9 +56,9 @@ public class ExpressionInputFilter implements InputFilter {
             if (state.isExclude()) {
                 result = REMOVE_OUTPUT;
                 lastLineFiltered = true;
-//            } else if (profile.isMultilineInputFilter() && !state.isMatchesSomething() && lastLineFiltered) {
-//                result = REMOVE_OUTPUT;
-//            }
+            }
+            else if (!state.isMatchesSomething() && lastLineFiltered) {
+                result = REMOVE_OUTPUT;
             }
         }
         if (result == null) {
@@ -70,6 +70,7 @@ public class ExpressionInputFilter implements InputFilter {
             return result;
         }
     }
+
     private void clearConsole (FilterState state){
         if (state != null) {
             ConsoleView consoleView = console.get();

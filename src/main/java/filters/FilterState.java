@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterState {
-    private int offset;
     protected ConsoleViewContentType consoleViewContentType;
     protected List<Filter.ResultItem> resultItemList;
+    private int offset;
     private boolean matchesSomething;
     private CharSequence charSequence;
     private boolean isExclude;
@@ -28,12 +28,12 @@ public class FilterState {
         return charSequence;
     }
 
-    public void setConsoleViewContentType(ConsoleViewContentType consoleViewContentType) {
-        this.consoleViewContentType = consoleViewContentType;
-    }
-
     public ConsoleViewContentType getConsoleViewContentType() {
         return consoleViewContentType;
+    }
+
+    public void setConsoleViewContentType(ConsoleViewContentType consoleViewContentType) {
+        this.consoleViewContentType = consoleViewContentType;
     }
 
     public TextAttributes getTextAttributes() {
@@ -58,12 +58,12 @@ public class FilterState {
         return resultItemList.add(resultItem);
     }
 
-    public void setMatchesSomething(boolean matchesSomething) {
-        this.matchesSomething = matchesSomething;
-    }
-
     public boolean isMatchesSomething() {
         return matchesSomething;
+    }
+
+    public void setMatchesSomething(boolean matchesSomething) {
+        this.matchesSomething = matchesSomething;
     }
 
     public boolean isExclude() {

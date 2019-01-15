@@ -159,8 +159,8 @@ public class MyForm extends JFrame {
     public void addUIItem(String expression, Color color, Operation operation) {
         if (!expression.isEmpty() && !containsItem(expression)) {
             if (operation == Operation.ADD)
-                panelForEl.add(new UIExprItem(expression, color, true, operation));
-            else panelForEl2.add(new UIExprItem(expression, color, true, operation));
+                panelForEl.add(new UIExprItem(expression, color, false, operation));
+            else panelForEl2.add(new UIExprItem(expression, color, false, operation));
             root.revalidate();
         }
     }
