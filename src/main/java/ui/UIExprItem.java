@@ -68,7 +68,7 @@ public class UIExprItem extends JPanel {
                 }
                 MyConfiguration.getInstance().getForm().getRootComponent().revalidate();
                 MyConfiguration.getInstance().getForm().getRootComponent().repaint();
-                MyConfiguration.getInstance().deleteItem(item);
+                MyConfiguration.getInstance().prepareToDelete(item);
 
             }
         });

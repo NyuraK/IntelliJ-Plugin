@@ -2,15 +2,20 @@ package plugin;
 
 import com.intellij.execution.filters.InputFilter;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.impl.EditorHyperlinkSupport;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.execution.ui.RunContentManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
@@ -47,10 +52,15 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     private Project project;
     @Transient
     private ConsoleView console;
+    @Transient
+    private boolean onDelete =false;
+    @Transient
+    private ConsoleViewContentType contentType;
 
     public MyConfiguration() {
 
     }
+
 
     public static MyConfiguration getInstance() {
         return ApplicationManager.getApplication().getComponent(MyConfiguration.class);
@@ -102,8 +112,19 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     @Override
     public void apply() throws ConfigurationException {
-        createHighlightFilterIfMissing(console);
-        new Rehighlighter().resetHighlights(console);
+        if (onDelete && project != null) {
+//            System.out.print("MY CONSOLE OUTPUT"+((ConsoleViewImpl) console).getText());
+//            ConsoleViewImpl consoleView = new ConsoleViewImpl(project, true);
+//            String data = ((ConsoleViewImpl) console).getText();
+//            console.clear();
+//            console.print(data, ConsoleViewContentType.NORMAL_OUTPUT);
+            new Rehighlighter().doJobOnDelete(console);
+            onDelete = false;
+        }
+        else if (console != null) {
+            createHighlightFilterIfMissing(console);
+            new Rehighlighter().resetHighlights(console);
+        }
 //            if (operation == Operation.ADD) {
 //
 //            }
@@ -160,7 +181,13 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    public void deleteItem(ExpressionItem delete) {
+    public void prepareToDelete(ExpressionItem item) {
+        contentType = item.getConsoleViewContentType(null);
+        this.onDelete = true;
+        deleteItem(item);
+    }
+
+    private void deleteItem(ExpressionItem delete) {
         for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
             ExpressionItem item = i.next();
             if (item.equals(delete)) {
