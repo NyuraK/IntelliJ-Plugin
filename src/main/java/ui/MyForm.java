@@ -1,5 +1,9 @@
 package ui;
 
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.ide.impl.DataManagerImpl;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.ColorPicker;
 import plugin.MyConfiguration;
@@ -48,7 +52,8 @@ public class MyForm extends JFrame {
         pack();
         if (!MyConfiguration.getInstance().getExpressionItems().isEmpty()) {
             for (ExpressionItem item: MyConfiguration.getInstance().getExpressionItems()) {
-                panelForEl.add(new UIExprItem(item.getExpression(), item.getColor(), caseButton.isSelected(), Operation.ADD));
+                panelForEl.add(new UIExprItem(item.getExpression(), item.getColor(),
+                        caseButton.isSelected(), Operation.ADD));
             }
             root.revalidate();
         }
@@ -58,12 +63,13 @@ public class MyForm extends JFrame {
                 String expression = textField1.getText();
                 //TODO проверять на наличие в
                 if (!expression.isEmpty() && !containsItem(expression)) {
+                    DataContext dataContext = DataManagerImpl.getInstance().getDataContext(root);
+                    ConsoleView consoleView = dataContext.getData(LangDataKeys.CONSOLE_VIEW);
                     panelForEl.add(new UIExprItem(expression, color, caseButton.isSelected(), Operation.ADD));
                     caseButton.setSelected(false);
                     root.revalidate();
                 }
                 textField1.setText("");
-                MyConfiguration.getInstance().setOperation(Operation.ADD);
                 changed = true;
             }
         });
@@ -86,7 +92,6 @@ public class MyForm extends JFrame {
                     root.revalidate();
                 }
                 textField2.setText("");
-//                MyConfiguration.getInstance().setOperation(Operation.ADD);
                 changed = true;
             }
         });
@@ -156,7 +161,7 @@ public class MyForm extends JFrame {
         root.add(panelForEl);
     }
 
-    public void addUIItem(String expression, Color color, Operation operation) {
+    public void addUIItemFromEditor(String expression, Color color, Operation operation) {
         if (!expression.isEmpty() && !containsItem(expression)) {
             if (operation == Operation.ADD)
                 panelForEl.add(new UIExprItem(expression, color, false, operation));

@@ -1,5 +1,9 @@
 package ui;
 
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.ide.impl.DataManagerImpl;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.components.JBCheckBox;
 import plugin.MyConfiguration;
@@ -64,12 +68,8 @@ public class UIExprItem extends JPanel {
                 }
                 MyConfiguration.getInstance().getForm().getRootComponent().revalidate();
                 MyConfiguration.getInstance().getForm().getRootComponent().repaint();
-                MyConfiguration.getInstance().deleteItem(item);
-                if (item.getOperation() == Operation.ADD) {
-                    MyConfiguration.getInstance().setExpressionItems(new ExpressionItem()
-                            .setStyle(Color.BLACK, Color.white).setExpression(item.getExpression()).setOperation(Operation.ADD));
-                    MyConfiguration.getInstance().setOperation(Operation.DELETE);
-                }
+                MyConfiguration.getInstance().prepareToDelete(item);
+
             }
         });
     }

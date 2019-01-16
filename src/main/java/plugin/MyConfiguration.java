@@ -2,16 +2,16 @@ package plugin;
 
 import com.intellij.execution.filters.InputFilter;
 import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.impl.EditorHyperlinkSupport;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.execution.ui.RunContentManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.impl.EditorActionManagerImpl;
-import com.intellij.openapi.editor.impl.EditorHighlighterCache;
-import com.intellij.openapi.editor.impl.EditorMarkupModelImpl;
+
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -33,8 +33,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @State(
         name="Highlighting console",
@@ -45,7 +43,6 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
     public static final int maxLengthToMatch = 200;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
-    private boolean onUpdate = false;
 
     @Transient
     private MyForm form;
@@ -55,11 +52,14 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     @Transient
     private ConsoleView console;
     @Transient
-    private Operation operation = Operation.NONE;
+    private boolean onDelete =false;
+    @Transient
+    private ConsoleViewContentType contentType;
 
     public MyConfiguration() {
 
     }
+
 
     public static MyConfiguration getInstance() {
         return ApplicationManager.getApplication().getComponent(MyConfiguration.class);
@@ -84,30 +84,10 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
     }
 
     public void setExpressionItems(ExpressionItem item) {
-        checkIfExists(item);
-        this.expressionItems.add(item);
-        if (onUpdate) update();
+        if (!expressionItems.contains(item))
+            this.expressionItems.add(item);
     }
 
-    private void checkIfExists(ExpressionItem item) {
-        String input = item.getExpression();
-        ExpressionItem onDelete = item;
-        for (ExpressionItem i: expressionItems) {
-            final Pattern pattern = i.getPattern();
-            final Matcher matcher = pattern.matcher(input);
-            if (matcher.find() && i.getColor().equals(Color.white)) {
-                System.out.println("A-ha! Matches");
-                onDelete = i;
-                break;
-            }
-        }
-        if (item == onDelete){
-            System.out.println("But references wrong...");
-            return;
-        }
-        onUpdate = true;
-        deleteItem(onDelete);
-    }
 
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
@@ -131,22 +111,19 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     @Override
     public void apply() throws ConfigurationException {
-        if (console != null) {
-            if (operation == Operation.ADD) {
-                createHighlightFilterIfMissing(console);
-                new Rehighlighter().resetHighlights(console);
-            }
-            else if (operation == Operation.DELETE) {
-                //TODO I still can't figure out why and how...
-                for (int i=0; i<5; i++){
-                    createHighlightFilterIfMissing(console);
-                }
-                new Rehighlighter().resetHighlights(console);
-
-            }
-            operation = Operation.NONE;
+        if (onDelete && project != null) {
+            new Rehighlighter().doJobOnDelete(console);
+            onDelete = false;
+        }
+        else if (console != null) {
+            createHighlightFilterIfMissing(console);
+            new Rehighlighter().resetHighlights(console);
         }
 
+    }
+
+    public ConsoleView getConsole() {
+        return console;
     }
 
     @NotNull
@@ -164,9 +141,11 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         return StringUtil.newBombedCharSequence(substring, Integer.valueOf(MAX_PROCESSING_TIME_DEFAULT));
     }
 
-
     public void setConsole(ConsoleView consoleView) {
-        this.console = consoleView;
+        if (consoleView != null && consoleView != console) {
+            this.console = consoleView;
+        }
+        if (consoleView == null) System.out.println("It's null (((");
     }
 
     public void createHighlightFilterIfMissing(@NotNull ConsoleView console) {
@@ -187,7 +166,13 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    public void deleteItem(ExpressionItem delete) {
+    public void prepareToDelete(ExpressionItem item) {
+        contentType = item.getConsoleViewContentType(null);
+        this.onDelete = true;
+        deleteItem(item);
+    }
+
+    private void deleteItem(ExpressionItem delete) {
         for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
             ExpressionItem item = i.next();
             if (item.equals(delete)) {
@@ -196,21 +181,9 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         }
     }
 
-    private void update() {
-        for (int i=0; i<5; i++)
-            createHighlightFilterIfMissing(console);
-        new Rehighlighter().resetHighlights(console);
-        onUpdate = false;
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
-    }
-
     public void addToPanel(String expression, Color color, Operation operation) {
         if (form == null) return;
-        form.addUIItem(expression, color, operation);
+        form.addUIItemFromEditor(expression, color, operation);
     }
-
 
 }
