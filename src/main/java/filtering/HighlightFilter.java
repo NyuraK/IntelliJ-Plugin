@@ -1,4 +1,4 @@
-package filters;
+package filtering;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;

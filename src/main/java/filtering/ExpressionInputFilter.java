@@ -1,4 +1,4 @@
-package filters;
+package filtering;
 
 import com.intellij.execution.filters.InputFilter;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//todo : Почему убирает либо вообще все, либо оставляет мусор, когда надо все убрать
 public class ExpressionInputFilter implements InputFilter {
     private static final List<Pair<String, ConsoleViewContentType>> REMOVE_OUTPUT = Collections.singletonList(new Pair<>(null, null));
 

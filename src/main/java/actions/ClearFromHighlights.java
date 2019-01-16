@@ -4,9 +4,7 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.util.IconLoader;
-import filters.Rehighlighter;
-import plugin.MyConfiguration;
-import stuff.Operation;
+import stuff.Rehighlighter;
 
 import javax.swing.*;
 

@@ -10,7 +10,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.ColorPicker;
-import filters.Rehighlighter;
+import stuff.Rehighlighter;
 import plugin.MyConfiguration;
 import stuff.Operation;
 import stuff.Utils;

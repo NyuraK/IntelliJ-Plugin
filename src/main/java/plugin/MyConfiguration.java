@@ -13,9 +13,9 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
-import filters.ExpressionInputFilter;
-import filters.HighlightFilter;
-import filters.Rehighlighter;
+import filtering.ExpressionInputFilter;
+import filtering.HighlightFilter;
+import stuff.Rehighlighter;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +36,7 @@ import java.util.List;
 )
 public class MyConfiguration implements ApplicationComponent, Configurable, PersistentStateComponent<MyConfiguration> {
     private static final String MAX_PROCESSING_TIME_DEFAULT = "1000";
-    public static final int maxLengthToMatch = 200;
+    private static final int maxLengthToMatch = 120;
     private List<ExpressionItem> expressionItems = new ArrayList<>();
 
     @Transient

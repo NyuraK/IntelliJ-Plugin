@@ -1,4 +1,4 @@
-package filters;
+package filtering;
 
 import com.intellij.execution.filters.Filter;
 import org.apache.commons.lang.StringUtils;

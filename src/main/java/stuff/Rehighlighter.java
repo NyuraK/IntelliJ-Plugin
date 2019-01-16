@@ -1,10 +1,11 @@
-package filters;
+package stuff;
 
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.impl.EditorHyperlinkSupport;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import filtering.HighlightFilter;
 import plugin.MyConfiguration;
 
 public class Rehighlighter {

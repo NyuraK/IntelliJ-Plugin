@@ -1,4 +1,4 @@
-package filters;
+package filtering;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -53,14 +53,6 @@ public class FilterState {
             resultItemList = new ArrayList<>();
         }
         return resultItemList.add(resultItem);
-    }
-
-    public boolean isListEmpty() {
-        return resultItemList == null;
-    }
-
-    public boolean isMatchesSomething() {
-        return matchesSomething;
     }
 
     public void setMatchesSomething(boolean matchesSomething) {

@@ -18,7 +18,6 @@ public class UIExprItem extends JPanel {
     private JLabel expression;
     private JButton picker = new JButton();
     private JButton deleteBtn = new JButton();
-    private JCheckBox highlightOnlyMatching = new JBCheckBox();
 
     private UIExprItem() {
     }
@@ -34,7 +33,6 @@ public class UIExprItem extends JPanel {
         this.add(expression);
         this.add(picker);
         this.add(deleteBtn);
-        this.add(highlightOnlyMatching);
 
         item = new ExpressionItem();
         item.setStyle(Color.BLACK, color)
