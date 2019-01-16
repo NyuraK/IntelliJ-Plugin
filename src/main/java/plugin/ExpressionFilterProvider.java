@@ -15,6 +15,6 @@ public class ExpressionFilterProvider extends ConsoleDependentFilterProvider {
     public Filter[] getDefaultFilters(@NotNull ConsoleView consoleView, @NotNull Project project, @NotNull GlobalSearchScope scope) {
 //        System.out.println("We're in getDefaultFilters");
 //        new ConsoleViewWrapperBase(consoleView).addMessageFilter(MyConfiguration.getInstance().createHighlightFilter(project));
-        return new Filter[]{MyConfiguration.getInstance().createHighlightFilter(project)};
+        return new Filter[]{MyConfiguration.getInstance().createHighlightFilter()};
     }
 }

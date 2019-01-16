@@ -3,5 +3,7 @@ package stuff;
 public enum Operation {
     ADD,
     DELETE,
-    NONE
+    NONE,
+    CONTINUE_MATCHING,
+    EXIT
 }

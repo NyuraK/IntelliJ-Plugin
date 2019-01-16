@@ -17,7 +17,6 @@ public class ExpressionItem {
     private transient Pattern pattern;
     private boolean isCaseSensitive;
     private ItemStyle style = new ItemStyle();
-    //TODO figure out how to set operation
     private Operation operation = Operation.NONE;
 
     public ExpressionItem() {
@@ -39,16 +38,16 @@ public class ExpressionItem {
         return expression;
     }
 
-    public ExpressionItem setCaseSensitive(boolean caseSensitive) {
-        isCaseSensitive = caseSensitive;
-        return this;
-    }
-
     public ExpressionItem setExpression(String expression) {
         if (this.expression == null || expression == null || !this.expression.equals(expression)) {
             this.expression = expression;
             this.pattern = Pattern.compile(expression, computeFlags());
         }
+        return this;
+    }
+
+    public ExpressionItem setCaseSensitive(boolean caseSensitive) {
+        isCaseSensitive = caseSensitive;
         return this;
     }
 
@@ -80,7 +79,6 @@ public class ExpressionItem {
     public ConsoleViewContentType getConsoleViewContentType(ConsoleViewContentType consoleViewContentType) {
         ConsoleViewContentType result;
         if (consoleViewContentType != null) {
-            // TODO maybe tree would have better performance?
             final String newId = consoleViewContentType.toString() + "-" + getId();
             result = Cache.getInstance().get(newId);
             if (result == null) {
@@ -116,6 +114,12 @@ public class ExpressionItem {
         return style.background;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        ExpressionItem item = (ExpressionItem) obj;
+        return this.id.equals(item.id);
+    }
+
     private class ItemStyle {
         private Color foreground = Color.BLACK;
         private Color background = Color.BLACK;
@@ -136,11 +140,5 @@ public class ExpressionItem {
         public void setBackground(Color background) {
             this.background = background;
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        ExpressionItem item = (ExpressionItem) obj;
-        return this.id.equals(item.id);
     }
 }

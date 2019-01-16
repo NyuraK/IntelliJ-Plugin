@@ -2,7 +2,6 @@ package filters;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.NotNull;
 import stuff.ExpressionItem;
 import stuff.Operation;
@@ -17,10 +16,19 @@ public class FilterState {
     private boolean matchesSomething;
     private CharSequence charSequence;
     private boolean isExclude;
+    private Operation nextOperation = Operation.CONTINUE_MATCHING;
 
     public FilterState(int offset, CharSequence charSequence) {
         this.offset = offset;
         this.charSequence = charSequence;
+    }
+
+    public Operation getNextOperation() {
+        return nextOperation;
+    }
+
+    public void setNextOperation(Operation nextOperation) {
+        this.nextOperation = nextOperation;
     }
 
     @NotNull
@@ -30,17 +38,6 @@ public class FilterState {
 
     public ConsoleViewContentType getConsoleViewContentType() {
         return consoleViewContentType;
-    }
-
-    public void setConsoleViewContentType(ConsoleViewContentType consoleViewContentType) {
-        this.consoleViewContentType = consoleViewContentType;
-    }
-
-    public TextAttributes getTextAttributes() {
-        if (consoleViewContentType == null) {
-            return null;
-        }
-        return consoleViewContentType.getAttributes();
     }
 
     public int getOffset() {
@@ -56,6 +53,10 @@ public class FilterState {
             resultItemList = new ArrayList<>();
         }
         return resultItemList.add(resultItem);
+    }
+
+    public boolean isListEmpty() {
+        return resultItemList == null;
     }
 
     public boolean isMatchesSomething() {
@@ -78,8 +79,8 @@ public class FilterState {
         Operation action = expressionItem.getOperation();
         if (Operation.DELETE.equals(action)) {
             setExclude(true);
-
         }
+        setNextOperation(Operation.EXIT);
         setMatchesSomething(true);
     }
 

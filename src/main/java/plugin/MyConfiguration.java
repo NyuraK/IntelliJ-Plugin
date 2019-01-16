@@ -2,19 +2,14 @@ package plugin;
 
 import com.intellij.execution.filters.InputFilter;
 import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.execution.impl.EditorHyperlinkSupport;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.execution.ui.RunContentManagerImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
@@ -46,33 +41,23 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     @Transient
     private MyForm form;
-
-    @Transient
-    private Project project;
     @Transient
     private ConsoleView console;
-    @Transient
-    private boolean onDelete =false;
-    @Transient
-    private ConsoleViewContentType contentType;
 
     public MyConfiguration() {
 
     }
 
-
     public static MyConfiguration getInstance() {
         return ApplicationManager.getApplication().getComponent(MyConfiguration.class);
     }
 
-    public HighlightFilter createHighlightFilter(Project project) {
-        this.project = project;
-        HighlightFilter highlightFilter = new HighlightFilter();
-        return highlightFilter;
+    public HighlightFilter createHighlightFilter() {
+        return new HighlightFilter();
     }
 
     public InputFilter createInputFilter() {
-        return new ExpressionInputFilter(console);
+        return new ExpressionInputFilter();
     }
 
     public List<ExpressionItem> getExpressionItems() {
@@ -111,19 +96,9 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     @Override
     public void apply() throws ConfigurationException {
-        if (onDelete && project != null) {
-            new Rehighlighter().doJobOnDelete(console);
-            onDelete = false;
+        if (console != null) {
+            new Rehighlighter().rehighlight(console);
         }
-        else if (console != null) {
-            createHighlightFilterIfMissing(console);
-            new Rehighlighter().resetHighlights(console);
-        }
-
-    }
-
-    public ConsoleView getConsole() {
-        return console;
     }
 
     @NotNull
@@ -150,7 +125,7 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
 
     public void createHighlightFilterIfMissing(@NotNull ConsoleView console) {
         if (console instanceof ConsoleViewImpl) {
-            HighlightFilter highlightFilter = createHighlightFilter(((ConsoleViewImpl) console).getProject());
+            HighlightFilter highlightFilter = createHighlightFilter();
             console.addMessageFilter(highlightFilter);
         }
     }
@@ -166,13 +141,7 @@ public class MyConfiguration implements ApplicationComponent, Configurable, Pers
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    public void prepareToDelete(ExpressionItem item) {
-        contentType = item.getConsoleViewContentType(null);
-        this.onDelete = true;
-        deleteItem(item);
-    }
-
-    private void deleteItem(ExpressionItem delete) {
+    public void deleteItem(ExpressionItem delete) {
         for (Iterator<ExpressionItem> i = expressionItems.iterator(); i.hasNext();) {
             ExpressionItem item = i.next();
             if (item.equals(delete)) {

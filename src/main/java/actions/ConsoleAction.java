@@ -14,9 +14,6 @@ public class ConsoleAction extends DumbAwareAction {
     public static final Icon ICON = IconLoader.getIcon("/paint-brush.png");
     private ConsoleView consoleView;
 
-    public ConsoleAction() {
-    }
-
     public ConsoleAction(ConsoleView console) {
         super("Open 'Expression Add' Console", null, ICON);
         this.consoleView = console;
@@ -25,7 +22,6 @@ public class ConsoleAction extends DumbAwareAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-//        MyConfiguration.getInstance().prepareForm();
         MyConfiguration.getInstance().setConsole(consoleView);
         ShowSettingsUtil.getInstance().editConfigurable(project, "ExpressionAddPanel", MyConfiguration.getInstance(), true);
     }

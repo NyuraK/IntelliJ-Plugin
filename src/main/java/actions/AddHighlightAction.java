@@ -51,8 +51,7 @@ public class AddHighlightAction extends DumbAwareAction {
 
     private void addToConsole(ConsoleView console, String expression, Color color) {
         MyConfiguration.getInstance().addToPanel(expression, color, Operation.ADD);
-        MyConfiguration.getInstance().createHighlightFilterIfMissing(console);
-        new Rehighlighter().resetHighlights(console);
+        new Rehighlighter().rehighlight(console);
     }
 
     @Override

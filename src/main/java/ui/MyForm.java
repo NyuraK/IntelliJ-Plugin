@@ -61,10 +61,7 @@ public class MyForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String expression = textField1.getText();
-                //TODO проверять на наличие в
                 if (!expression.isEmpty() && !containsItem(expression)) {
-                    DataContext dataContext = DataManagerImpl.getInstance().getDataContext(root);
-                    ConsoleView consoleView = dataContext.getData(LangDataKeys.CONSOLE_VIEW);
                     panelForEl.add(new UIExprItem(expression, color, caseButton.isSelected(), Operation.ADD));
                     caseButton.setSelected(false);
                     root.revalidate();
@@ -85,7 +82,6 @@ public class MyForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String expression = textField2.getText();
-                //TODO проверять на наличие в
                 if (!expression.isEmpty()) {
                     panelForEl2.add(new UIExprItem(expression, Color.white, caseButton2.isSelected(), Operation.DELETE));
                     caseButton.setSelected(false);
